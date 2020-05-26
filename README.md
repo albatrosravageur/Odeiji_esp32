@@ -1,5 +1,4 @@
-# Hello World Example
+# Odeiji firmware source code
+main.c asemble les différents modules et lance les threads
 
-Starts a FreeRTOS task to print "Hello World"
-
-See the README.md file in the upper level 'examples' directory for more information about examples.
+touch_button.c contient les fonctions des boutons  
