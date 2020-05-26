@@ -3,6 +3,7 @@
 # project subdirectory.
 #
 
-PROJECT_NAME := touch_pad_interrupt
+PROJECT_NAME := odeiji_v1.3
 
 include $(IDF_PATH)/make/project.mk
+
