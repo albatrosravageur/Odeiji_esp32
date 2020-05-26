@@ -1,4 +1,4 @@
-/* * Data converted from /home/albatros/esp/odeiji_v1.2/build/esp-idf/mbedtls/x509_crt_bundle
+/* * Data converted from /home/albatros/esp/Odeiji_esp32/build/esp-idf/mbedtls/x509_crt_bundle
  */
 .data
 .section .rodata.embedded

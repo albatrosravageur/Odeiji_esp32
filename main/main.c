@@ -12,9 +12,11 @@
 //#include "freertos/task.h"
 #include "esp_system.h"
 #include "esp_spi_flash.h"
-#include "touch_button.c"
+#include "touch_button.h"
+#include "bluetooth.c"
 
 void app_main(void)
 {
     touch_main();
+    bluetooth_main();
 }

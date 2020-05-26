@@ -6,7 +6,7 @@
 # It is included in the main 'build.ninja'.
 
 # =============================================================================
-# Project: touch_pad_interrupt
+# Project: odeiji_v1.3
 # Configuration: 
 # =============================================================================
 # =============================================================================
@@ -22,7 +22,7 @@ rule CUSTOM_COMMAND
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__touch_pad_interrupt.2eelf
+rule C_COMPILER__odeiji_v1.2e3.2eelf
   depfile = $DEP_FILE
   deps = gcc
   command = /home/albatros/.espressif/tools/xtensa-esp32-elf/esp-2020r1-8.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out   -c $in
@@ -32,7 +32,7 @@ rule C_COMPILER__touch_pad_interrupt.2eelf
 #############################################
 # Rule for linking CXX executable.
 
-rule CXX_EXECUTABLE_LINKER__touch_pad_interrupt.2eelf
+rule CXX_EXECUTABLE_LINKER__odeiji_v1.2e3.2eelf
   command = $PRE_LINK && /home/albatros/.espressif/tools/xtensa-esp32-elf/esp-2020r1-8.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++  $FLAGS  $LINK_FLAGS $in  -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
   description = Linking CXX executable $TARGET_FILE
   restat = $RESTAT
@@ -1403,7 +1403,7 @@ rule CXX_STATIC_LIBRARY_LINKER____idf_main
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = /usr/bin/cmake -S/home/albatros/esp/odeiji_v1.2 -B/home/albatros/esp/odeiji_v1.2/build
+  command = /usr/bin/cmake -S/home/albatros/esp/Odeiji_esp32 -B/home/albatros/esp/Odeiji_esp32/build
   description = Re-running CMake...
   generator = 1
 

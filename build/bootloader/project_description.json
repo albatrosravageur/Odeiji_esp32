@@ -1,8 +1,8 @@
 {
     "project_name":       "bootloader",
     "project_path":       "/home/albatros/esp/esp-idf/components/bootloader/subproject",
-    "build_dir":          "/home/albatros/esp/odeiji_v1.2/build/bootloader",
-    "config_file":        "/home/albatros/esp/odeiji_v1.2/sdkconfig",
+    "build_dir":          "/home/albatros/esp/Odeiji_esp32/build/bootloader",
+    "config_file":        "/home/albatros/esp/Odeiji_esp32/sdkconfig",
     "config_defaults":    "",
     "app_elf":            "bootloader.elf",
     "app_bin":            "bootloader.bin",

@@ -34,8 +34,8 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/albatros/esp/odeiji_v1.2/build/esp-idf/mbedtls/mbedtls/library/cmake_install.cmake")
-  include("/home/albatros/esp/odeiji_v1.2/build/esp-idf/mbedtls/mbedtls/include/cmake_install.cmake")
+  include("/home/albatros/esp/Odeiji_esp32/build/esp-idf/mbedtls/mbedtls/library/cmake_install.cmake")
+  include("/home/albatros/esp/Odeiji_esp32/build/esp-idf/mbedtls/mbedtls/include/cmake_install.cmake")
 
 endif()
 

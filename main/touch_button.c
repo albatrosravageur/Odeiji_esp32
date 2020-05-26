@@ -1,27 +1,7 @@
-/* Touch Pad Interrupt Example
 
-   This example code is in the Public Domain (or CC0 licensed, at your option.)
-
-   Unless required by applicable law or agreed to in writing, this
-   software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-   CONDITIONS OF ANY KIND, either express or implied.
-*/
-#include <stdio.h>
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "freertos/queue.h"
-#include "esp_log.h"
-#include "driver/touch_pad.h"
-#include "soc/rtc_periph.h"
-#include "soc/sens_periph.h"
-
+#include "touch_button.h"
 
 static const char *TAG = "Touch pad";
-
-#define TOUCH_THRESH_NO_USE   (0)
-#define TOUCH_THRESH_PERCENT  (80)
-#define TOUCHPAD_FILTER_TOUCH_PERIOD (10)
-#define TOUCHPAD_ID (0)
 
 static bool s_pad_activated;
 static uint32_t s_pad_init_val;
