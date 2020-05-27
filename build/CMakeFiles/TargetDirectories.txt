@@ -339,6 +339,7 @@
 /home/albatros/esp/Odeiji_esp32/build/esp-idf/bt/CMakeFiles/list_install_components.dir
 /home/albatros/esp/Odeiji_esp32/build/esp-idf/bt/CMakeFiles/rebuild_cache.dir
 /home/albatros/esp/Odeiji_esp32/build/esp-idf/bt/CMakeFiles/edit_cache.dir
+/home/albatros/esp/Odeiji_esp32/build/esp-idf/bt/CMakeFiles/__idf_bt.dir
 /home/albatros/esp/Odeiji_esp32/build/esp-idf/cbor/CMakeFiles/install/local.dir
 /home/albatros/esp/Odeiji_esp32/build/esp-idf/cbor/CMakeFiles/install.dir
 /home/albatros/esp/Odeiji_esp32/build/esp-idf/cbor/CMakeFiles/list_install_components.dir

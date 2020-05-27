@@ -30,6 +30,7 @@
 /home/albatros/esp/Odeiji_esp32/build/esp-idf/cxx/libcxx.a
 /home/albatros/esp/Odeiji_esp32/build/esp-idf/app_trace/libapp_trace.a
 /home/albatros/esp/Odeiji_esp32/build/esp-idf/asio/libasio.a
+/home/albatros/esp/Odeiji_esp32/build/esp-idf/bt/libbt.a
 /home/albatros/esp/Odeiji_esp32/build/esp-idf/cbor/libcbor.a
 /home/albatros/esp/Odeiji_esp32/build/esp-idf/coap/libcoap.a
 /home/albatros/esp/Odeiji_esp32/build/esp-idf/console/libconsole.a

@@ -13,7 +13,8 @@
 #include "esp_system.h"
 #include "esp_spi_flash.h"
 #include "touch_button.h"
-#include "bluetooth.c"
+//#include "bluetooth.h"
+#include "bt_main.c"
 
 void app_main(void)
 {
