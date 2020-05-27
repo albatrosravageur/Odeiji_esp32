@@ -20,13 +20,13 @@
 			{
 				"command" : 1,
 				"file" : 1,
-				"line" : 6,
+				"line" : 7,
 				"parent" : 0
 			},
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 478,
+				"line" : 474,
 				"parent" : 1
 			}
 		]
@@ -37,8 +37,8 @@
 			"id" : "odeiji_v1.3.elf::@6890427a1f51a3e7e1df"
 		}
 	],
-	"id" : "size-files::@6890427a1f51a3e7e1df",
-	"name" : "size-files",
+	"id" : "size::@6890427a1f51a3e7e1df",
+	"name" : "size",
 	"paths" : 
 	{
 		"build" : ".",
@@ -66,13 +66,13 @@
 		{
 			"backtrace" : 2,
 			"isGenerated" : true,
-			"path" : "build/CMakeFiles/size-files",
+			"path" : "build/CMakeFiles/size",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 0,
 			"isGenerated" : true,
-			"path" : "build/CMakeFiles/size-files.rule",
+			"path" : "build/CMakeFiles/size.rule",
 			"sourceGroupIndex" : 1
 		}
 	],

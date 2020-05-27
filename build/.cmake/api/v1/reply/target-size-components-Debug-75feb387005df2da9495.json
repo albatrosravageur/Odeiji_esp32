@@ -20,19 +20,25 @@
 			{
 				"command" : 1,
 				"file" : 1,
-				"line" : 6,
+				"line" : 7,
 				"parent" : 0
 			},
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 438,
+				"line" : 482,
 				"parent" : 1
 			}
 		]
 	},
-	"id" : "_project_elf_src::@6890427a1f51a3e7e1df",
-	"name" : "_project_elf_src",
+	"dependencies" : 
+	[
+		{
+			"id" : "odeiji_v1.3.elf::@6890427a1f51a3e7e1df"
+		}
+	],
+	"id" : "size-components::@6890427a1f51a3e7e1df",
+	"name" : "size-components",
 	"paths" : 
 	{
 		"build" : ".",
@@ -51,8 +57,7 @@
 			"name" : "CMake Rules",
 			"sourceIndexes" : 
 			[
-				1,
-				2
+				1
 			]
 		}
 	],
@@ -61,19 +66,13 @@
 		{
 			"backtrace" : 2,
 			"isGenerated" : true,
-			"path" : "build/CMakeFiles/_project_elf_src",
+			"path" : "build/CMakeFiles/size-components",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 0,
 			"isGenerated" : true,
-			"path" : "build/CMakeFiles/_project_elf_src.rule",
-			"sourceGroupIndex" : 1
-		},
-		{
-			"backtrace" : 0,
-			"isGenerated" : true,
-			"path" : "build/project_elf_src.c.rule",
+			"path" : "build/CMakeFiles/size-components.rule",
 			"sourceGroupIndex" : 1
 		}
 	],

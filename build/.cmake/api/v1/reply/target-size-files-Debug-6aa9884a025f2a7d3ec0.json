@@ -1,54 +1,44 @@
 {
-	"backtrace" : 4,
+	"backtrace" : 2,
 	"backtraceGraph" : 
 	{
 		"commands" : 
 		[
 			"add_custom_target",
-			"__kconfig_generate_config",
-			"idf_build_process",
 			"project"
 		],
 		"files" : 
 		[
-			"/home/albatros/esp/esp-idf/tools/cmake/kconfig.cmake",
-			"/home/albatros/esp/esp-idf/tools/cmake/build.cmake",
 			"/home/albatros/esp/esp-idf/tools/cmake/project.cmake",
 			"CMakeLists.txt"
 		],
 		"nodes" : 
 		[
 			{
-				"file" : 3
-			},
-			{
-				"command" : 3,
-				"file" : 3,
-				"line" : 6,
-				"parent" : 0
-			},
-			{
-				"command" : 2,
-				"file" : 2,
-				"line" : 395,
-				"parent" : 1
+				"file" : 1
 			},
 			{
 				"command" : 1,
 				"file" : 1,
-				"line" : 442,
-				"parent" : 2
+				"line" : 7,
+				"parent" : 0
 			},
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 288,
-				"parent" : 3
+				"line" : 478,
+				"parent" : 1
 			}
 		]
 	},
-	"id" : "confserver::@6890427a1f51a3e7e1df",
-	"name" : "confserver",
+	"dependencies" : 
+	[
+		{
+			"id" : "odeiji_v1.3.elf::@6890427a1f51a3e7e1df"
+		}
+	],
+	"id" : "size-files::@6890427a1f51a3e7e1df",
+	"name" : "size-files",
 	"paths" : 
 	{
 		"build" : ".",
@@ -74,15 +64,15 @@
 	"sources" : 
 	[
 		{
-			"backtrace" : 4,
+			"backtrace" : 2,
 			"isGenerated" : true,
-			"path" : "build/CMakeFiles/confserver",
+			"path" : "build/CMakeFiles/size-files",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 0,
 			"isGenerated" : true,
-			"path" : "build/CMakeFiles/confserver.rule",
+			"path" : "build/CMakeFiles/size-files.rule",
 			"sourceGroupIndex" : 1
 		}
 	],

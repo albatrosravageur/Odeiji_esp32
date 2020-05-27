@@ -25,7 +25,7 @@
 			{
 				"command" : 4,
 				"file" : 3,
-				"line" : 6,
+				"line" : 7,
 				"parent" : 0
 			},
 			{
@@ -53,13 +53,13 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 126,
+				"line" : 136,
 				"parent" : 5
 			}
 		]
 	},
-	"id" : "erase_flash::@6890427a1f51a3e7e1df",
-	"name" : "erase_flash",
+	"id" : "monitor::@6890427a1f51a3e7e1df",
+	"name" : "monitor",
 	"paths" : 
 	{
 		"build" : ".",
@@ -87,13 +87,13 @@
 		{
 			"backtrace" : 6,
 			"isGenerated" : true,
-			"path" : "build/CMakeFiles/erase_flash",
+			"path" : "build/CMakeFiles/monitor",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 0,
 			"isGenerated" : true,
-			"path" : "build/CMakeFiles/erase_flash.rule",
+			"path" : "build/CMakeFiles/monitor.rule",
 			"sourceGroupIndex" : 1
 		}
 	],

@@ -289,6 +289,7 @@ void char2_notify_handle(esp_gatt_if_t gatts_if, uint16_t conn_id) {
 	}
 }
 
+
 void char1_write_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param) {
 	ESP_LOGI(GATTS_TAG, "char1_write_handler %d\n", param->write.handle);
 
@@ -299,12 +300,17 @@ void char1_write_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp
 			gl_char[0].char_val->attr_value[pos]=param->write.value[pos];
 		}
 		ESP_LOGI(TAG, "char1_write_handler %.*s", gl_char[0].char_val->attr_len, (char*)gl_char[0].char_val->attr_value);
+
 	}
 	ESP_LOGI(GATTS_TAG, "char1_write_handler esp_gatt_rsp_t\n");
 	notify_gatts_if = gatts_if;
 	notify_conn_id = param->write.conn_id;
-    esp_ble_gatts_send_response(gatts_if, param->write.conn_id, param->write.trans_id, ESP_GATT_OK, NULL);
-    if (strncmp((const char *)gl_char[0].char_val->attr_value,"LED ON",6)==0) {
+
+  	if (strncmp((const char *)gl_char[0].char_val->attr_value,"PJ",2)==0) {
+		ESP_LOGI(TAG, "PG");
+		//int notify_pos = 4;
+		//esp_ble_gatts_send_indicate(gatts_if, param->write.conn_id, gl_char[1].char_handle,1,&notify_pos,false);
+	} else if (strncmp((const char *)gl_char[0].char_val->attr_value,"LED ON",6)==0) {
     	gpio_set_level(LED_PIN,HIGH);
     	led_stat=1;
     } else if (strncmp((const char *)gl_char[0].char_val->attr_value,"LED OFF",7)==0) {
@@ -314,6 +320,7 @@ void char1_write_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp
     	led_stat=1-led_stat;
     	gpio_set_level(LED_PIN,led_stat);
     } else {
+		ESP_LOGI(TAG, "ta mère");
     	char2_notify_handle(gatts_if, param->write.conn_id);
     }
 }

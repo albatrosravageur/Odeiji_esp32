@@ -1503,7 +1503,7 @@
 				{
 					"directoryIndex" : 10,
 					"id" : "__idf_app_update::@cc3b426666063acc9674",
-					"jsonFile" : "target-__idf_app_update-Debug-177eb60d65f84a138dec.json",
+					"jsonFile" : "target-__idf_app_update-Debug-78f3da3424c0a63fb573.json",
 					"name" : "__idf_app_update",
 					"projectIndex" : 1
 				},
@@ -1965,7 +1965,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "_project_elf_src::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-_project_elf_src-Debug-59edc762215b6381b2d6.json",
+					"jsonFile" : "target-_project_elf_src-Debug-aa2159afea1e6c19f88a.json",
 					"name" : "_project_elf_src",
 					"projectIndex" : 0
 				},
@@ -1979,7 +1979,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "app::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-app-Debug-b6c5c56e1601d81230d8.json",
+					"jsonFile" : "target-app-Debug-4b5db1728342031378f2.json",
 					"name" : "app",
 					"projectIndex" : 0
 				},
@@ -1993,7 +1993,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "bootloader::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-bootloader-Debug-0a439d4552c273b90bfa.json",
+					"jsonFile" : "target-bootloader-Debug-e28b8c7fdf0c1ae84bb9.json",
 					"name" : "bootloader",
 					"projectIndex" : 0
 				},
@@ -2007,7 +2007,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "confserver::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-confserver-Debug-d1cede1ff565ea26ad25.json",
+					"jsonFile" : "target-confserver-Debug-12d1eee32c6b253d6522.json",
 					"name" : "confserver",
 					"projectIndex" : 0
 				},
@@ -2056,7 +2056,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "encrypted-flash::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-encrypted-flash-Debug-0e280133f00c92556353.json",
+					"jsonFile" : "target-encrypted-flash-Debug-f2413a4e53fb19cf307f.json",
 					"name" : "encrypted-flash",
 					"projectIndex" : 0
 				},
@@ -2070,7 +2070,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "erase_flash::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-erase_flash-Debug-74f69b23b8b39a5eebeb.json",
+					"jsonFile" : "target-erase_flash-Debug-fd079b9fafcd0b416ec0.json",
 					"name" : "erase_flash",
 					"projectIndex" : 0
 				},
@@ -2084,14 +2084,14 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "flash::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-flash-Debug-baa71ecfa47dd1a0d4a9.json",
+					"jsonFile" : "target-flash-Debug-3f94282e39d95994f6b4.json",
 					"name" : "flash",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "gen_project_binary::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-gen_project_binary-Debug-279cbff3cadb68593396.json",
+					"jsonFile" : "target-gen_project_binary-Debug-082261f48b92d22cc5d8.json",
 					"name" : "gen_project_binary",
 					"projectIndex" : 0
 				},
@@ -2126,21 +2126,21 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "menuconfig::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-menuconfig-Debug-a9f889f5b53ccb1dde01.json",
+					"jsonFile" : "target-menuconfig-Debug-20bddc7ad8f0b46519d3.json",
 					"name" : "menuconfig",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "monitor::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-monitor-Debug-9c4282fd264ed0e1cf53.json",
+					"jsonFile" : "target-monitor-Debug-d0796f25a599288bbb5b.json",
 					"name" : "monitor",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "odeiji_v1.3.elf::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-odeiji_v1.3.elf-Debug-f797bd0c17bcc5d2811c.json",
+					"jsonFile" : "target-odeiji_v1.3.elf-Debug-6c4e77be554d928a4ce4.json",
 					"name" : "odeiji_v1.3.elf",
 					"projectIndex" : 0
 				},
@@ -2175,21 +2175,21 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "size::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-size-Debug-3dff38c624677734576b.json",
+					"jsonFile" : "target-size-Debug-ace85201a53903f71e0f.json",
 					"name" : "size",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "size-components::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-size-components-Debug-1f6cfa444e699ea1b80b.json",
+					"jsonFile" : "target-size-components-Debug-75feb387005df2da9495.json",
 					"name" : "size-components",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "size-files::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-size-files-Debug-f275a32ff23710fa36d5.json",
+					"jsonFile" : "target-size-files-Debug-6aa9884a025f2a7d3ec0.json",
 					"name" : "size-files",
 					"projectIndex" : 0
 				},
