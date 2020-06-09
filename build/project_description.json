@@ -6,7 +6,7 @@
     "config_defaults":    "",
     "app_elf":            "odeiji_v1.3.elf",
     "app_bin":            "odeiji_v1.3.bin",
-    "git_revision":       "v4.2-dev-1660-g7d7521367",
+    "git_revision":       "v4.2-dev-1660-g7d7521367-dirty",
     "target":             "esp32",
     "phy_data_partition": "",
     "monitor_baud" :      "115200",

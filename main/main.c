@@ -14,10 +14,12 @@
 #include "esp_spi_flash.h"
 #include "touch_button.h"
 //#include "bluetooth.h"
-#include "bt_main.c"
+#include "ESP32APA102Driver.h"
+#include "push_buttons.h"
 
 void app_main(void)
 {
     touch_main();
-    bluetooth_main();
+    push_main();
+    apa102_main();
 }
