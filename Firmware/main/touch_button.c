@@ -64,6 +64,10 @@ static void tp_example_set_thresholds(void)
   The difference caused by a 'touch' action could be very small, but we can still use
   filter mode to detect a 'touch' event.
  */
+int activated =0;
+int getactivated(){
+    return activated;
+}
 static void tp_example_read_task(void *pvParameter)
 {
     int filter_mode = 0;
@@ -78,20 +82,21 @@ static void tp_example_read_task(void *pvParameter)
                 // Clear information on pad activation
                 s_pad_activated = false;
             }
-        else {
-            //filter mode, disable touch interrupt
-            touch_pad_intr_disable();
-            touch_pad_clear_status();
-                uint16_t value = 0;
-                touch_pad_read_filtered(TOUCHPAD_ID, &value);
-                if (value < s_pad_init_val * TOUCH_THRESH_PERCENT / 100) {
-                    ESP_LOGI(TAG, "TouchPad activated!");
-                    ESP_LOGI(TAG, "value: %d; init val: %d", value, s_pad_init_val);
-                    vTaskDelay(200 / portTICK_PERIOD_MS);
-                    // Reset the counter to stop changing mode.
+            else {
+                //filter mode, disable touch interrupt
+                touch_pad_intr_disable();
+                touch_pad_clear_status();
+                    uint16_t value = 0;
+                    touch_pad_read_filtered(TOUCHPAD_ID, &value);
+                    if (value < s_pad_init_val * TOUCH_THRESH_PERCENT / 100) {
+                        activated=1;
+                        ESP_LOGI(TAG, "TouchPad activated!");
+                        ESP_LOGI(TAG, "value: %d; init val: %d", value, s_pad_init_val);
+                        vTaskDelay(200 / portTICK_PERIOD_MS);
+                        // Reset the counter to stop changing mode.
+                    }
                 }
             }
-        }
 
         vTaskDelay(10 / portTICK_PERIOD_MS);
     }

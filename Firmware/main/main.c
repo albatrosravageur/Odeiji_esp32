@@ -19,7 +19,8 @@
 
 void app_main(void)
 {
-    apa102_main();
+    
     touch_main();
     push_main();
+    apa102_main();
 }

@@ -1,20 +1,18 @@
 {
     "project_name":       "bootloader",
-    "project_path":       "/home/albatros/esp/esp-idf/components/bootloader/subproject",
-    "build_dir":          "/home/albatros/esp/Odeiji_esp32/build/bootloader",
-    "config_file":        "/home/albatros/esp/Odeiji_esp32/sdkconfig",
+    "project_path":       "C:/Users/JambonEmmental/esp/components/bootloader/subproject",
+    "build_dir":          "C:/Users/JambonEmmental/esp/Odeiji_esp32/build/bootloader",
+    "config_file":        "C:/Users/JambonEmmental/esp/Odeiji_esp32/sdkconfig",
     "config_defaults":    "",
     "app_elf":            "bootloader.elf",
     "app_bin":            "bootloader.bin",
-    "git_revision":       "v4.2-dev-1660-g7d7521367-dirty",
-    "target":             "esp32",
+    "git_revision":       "v4.0-dirty",
     "phy_data_partition": "",
-    "monitor_baud" :      "115200",
-    "monitor_toolprefix": "xtensa-esp32-elf-",
+    "monitor_baud" : "115200",
     "config_environment" : {
-        "COMPONENT_KCONFIGS" : "/home/albatros/esp/esp-idf/components/efuse/Kconfig;/home/albatros/esp/esp-idf/components/esp32/Kconfig;/home/albatros/esp/esp-idf/components/esp_common/Kconfig;/home/albatros/esp/esp-idf/components/log/Kconfig;/home/albatros/esp/esp-idf/components/spi_flash/Kconfig",
-        "COMPONENT_KCONFIGS_PROJBUILD" : "/home/albatros/esp/esp-idf/components/bootloader/Kconfig.projbuild;/home/albatros/esp/esp-idf/components/esptool_py/Kconfig.projbuild;/home/albatros/esp/esp-idf/components/partition_table/Kconfig.projbuild"
+        "COMPONENT_KCONFIGS" : "C:/Users/JambonEmmental/esp/components/efuse/Kconfig;C:/Users/JambonEmmental/esp/components/esp32/Kconfig;C:/Users/JambonEmmental/esp/components/esp_common/Kconfig;C:/Users/JambonEmmental/esp/components/log/Kconfig;C:/Users/JambonEmmental/esp/components/spi_flash/Kconfig",
+        "COMPONENT_KCONFIGS_PROJBUILD" : "C:/Users/JambonEmmental/esp/components/bootloader/Kconfig.projbuild;C:/Users/JambonEmmental/esp/components/esptool_py/Kconfig.projbuild;C:/Users/JambonEmmental/esp/components/partition_table/Kconfig.projbuild"
     },
     "build_components" : [ "bootloader", "bootloader_support", "efuse", "esp32", "esp_common", "esp_rom", "esptool_py", "log", "main", "micro-ecc", "partition_table", "soc", "spi_flash", "xtensa", "" ],
-    "build_component_paths" : [ "/home/albatros/esp/esp-idf/components/bootloader", "/home/albatros/esp/esp-idf/components/bootloader_support", "/home/albatros/esp/esp-idf/components/efuse", "/home/albatros/esp/esp-idf/components/esp32", "/home/albatros/esp/esp-idf/components/esp_common", "/home/albatros/esp/esp-idf/components/esp_rom", "/home/albatros/esp/esp-idf/components/esptool_py", "/home/albatros/esp/esp-idf/components/log", "/home/albatros/esp/esp-idf/components/bootloader/subproject/main", "/home/albatros/esp/esp-idf/components/bootloader/subproject/components/micro-ecc", "/home/albatros/esp/esp-idf/components/partition_table", "/home/albatros/esp/esp-idf/components/soc", "/home/albatros/esp/esp-idf/components/spi_flash", "/home/albatros/esp/esp-idf/components/xtensa", "" ]
+    "build_component_paths" : [ "C:/Users/JambonEmmental/esp/components/bootloader", "C:/Users/JambonEmmental/esp/components/bootloader_support", "C:/Users/JambonEmmental/esp/components/efuse", "C:/Users/JambonEmmental/esp/components/esp32", "C:/Users/JambonEmmental/esp/components/esp_common", "C:/Users/JambonEmmental/esp/components/esp_rom", "C:/Users/JambonEmmental/esp/components/esptool_py", "C:/Users/JambonEmmental/esp/components/log", "C:/Users/JambonEmmental/esp/components/bootloader/subproject/main", "C:/Users/JambonEmmental/esp/components/bootloader/subproject/components/micro-ecc", "C:/Users/JambonEmmental/esp/components/partition_table", "C:/Users/JambonEmmental/esp/components/soc", "C:/Users/JambonEmmental/esp/components/spi_flash", "C:/Users/JambonEmmental/esp/components/xtensa", "" ]
 }

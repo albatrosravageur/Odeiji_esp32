@@ -23,6 +23,8 @@
 #include "time.h"
 #include "sys/time.h"
 #include "esp_pthread.h"
+#include "push_buttons.h"
+#include "touch_button.h"
 
 #define GPIO_INPUT_IO_0     25
 #define GPIO_INPUT_IO_1     5
@@ -44,6 +46,12 @@ static long data_num = 0;
 static const esp_spp_sec_t sec_mask = ESP_SPP_SEC_AUTHENTICATE;
 static const esp_spp_role_t role_slave = ESP_SPP_ROLE_SLAVE;
 
+unsigned char tmpColour[8][3]={{0,0,0},{255,0,0},{0,255,0},{255,255,0},{0,255,255},{255,0,255},{255,255,255}};
+struct apa102LEDStrip leds;
+
+uint32_t hand;
+
+
 static void print_speed(void)
 {
     float time_old_s = time_old.tv_sec + time_old.tv_usec / 1000000.0;
@@ -56,10 +64,11 @@ static void print_speed(void)
     time_old.tv_usec = time_new.tv_usec;
 }
 
-static void esp_spp_cb(esp_spp_cb_event_t event, esp_spp_cb_param_t *param, char *ch = "response undefined\n")
+static void esp_spp_cb(esp_spp_cb_event_t event, esp_spp_cb_param_t *param) //, char *ch = "response undefined\n")
 {
     char buf[1024];
     char spp_data[256];
+    hand=param->write.handle;
     switch (event) {
     case ESP_SPP_INIT_EVT:
         ESP_LOGI(SPP_TAG, "ESP_SPP_INIT_EVT");
@@ -89,7 +98,16 @@ static void esp_spp_cb(esp_spp_cb_event_t event, esp_spp_cb_param_t *param, char
         if (param->data_ind.len < 1023) {
             snprintf(buf, (size_t)param->data_ind.len, (char *)param->data_ind.data);
             printf("%s\n", buf);
-            sprintf(spp_data, "Receined characters: %d\n", param->data_ind.len);
+            size_t length = strlen(buf);
+            size_t i = 0; 
+            for (; i < length; i++) {
+                //int x = atoi(buf[i]);
+                printf("%c\n", buf[i]);
+                int x = buf[i] - '0';    
+                setPixel(&leds, i, tmpColour[x],255);
+            }
+            renderLEDs();
+            sprintf(spp_data, "Receined characters: %d\n", getcont());
             esp_spp_write(param->write.handle, strlen(spp_data), (uint8_t *)spp_data);
         }
         else {
@@ -171,9 +189,9 @@ void esp_bt_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *param)
 
 static xQueueHandle gpio_evt_queue = NULL;
 
-void send_by_BT(char **ch){
+/*void send_by_BT(char **ch){
     esp_spp_cb(ESP_SPP_DATA_IND_EVT, param, ch);
-}
+}*/
 
 static void IRAM_ATTR gpio_isr_handler(void* arg)
 {
@@ -193,7 +211,7 @@ static void gpio_task_example(void* arg)
 
 unsigned char colourList[9*3]={maxValuePerColour,0,0, maxValuePerColour,maxValuePerColour,0, 0,maxValuePerColour,0, 0,maxValuePerColour,maxValuePerColour, 0,0,maxValuePerColour, maxValuePerColour,0,maxValuePerColour, maxValuePerColour,maxValuePerColour,maxValuePerColour, maxValuePerColour,0,0, 0,0,0};
 
-struct apa102LEDStrip leds;
+
 struct colourObject dynColObject;
 
 //SPI Vars
@@ -204,6 +222,52 @@ spi_bus_config_t buscfg;
 spi_device_interface_config_t devcfg;
 xQueueHandle demo_queue;
 int cont;
+int activated;
+int donecont=1;
+int doneactivated = 1;
+
+void tx_task3(void *arg) {
+
+	while (1) {
+		cont=getcont();
+        if(cont==1 && donecont==1){
+            //printf("up");
+            donecont=0;
+            char spp_data[256];
+            sprintf(spp_data, "pause");//param->data_ind.len);
+            esp_spp_write(hand, strlen(spp_data), (uint8_t *)spp_data);
+            vTaskDelay(3000 / portTICK_RATE_MS);
+        }
+        else
+        {
+            donecont=1;
+        }
+        
+        vTaskDelay(10 / portTICK_RATE_MS);
+	}
+
+}
+
+void tx_task4(void *arg) {
+
+	while (1) {
+		activated=getactivated();
+        if(activated==1 && doneactivated==1){
+            //printf("up");
+            doneactivated=0;
+            char spp_data[256];
+            sprintf(spp_data, "next");//param->data_ind.len);
+            esp_spp_write(hand, strlen(spp_data), (uint8_t *)spp_data);
+            vTaskDelay(3000 / portTICK_RATE_MS);
+        }else
+        {
+            doneactivated=1;
+        }
+        
+        vTaskDelay(10 / portTICK_RATE_MS);
+	}
+
+}
 
 
 void apa102_main()
@@ -295,7 +359,7 @@ void apa102_main()
     gpio_isr_handler_add(GPIO_INPUT_IO_0, gpio_isr_handler, (void*) GPIO_INPUT_IO_0);
 
     int cont = 0;
-	unsigned char tmpColour[3];
+	
 	unsigned short int cIndex=0, cnt=0;
 	
     printf("\r\n\r\n\r\nHello Pixels!\n");
@@ -305,7 +369,7 @@ void apa102_main()
 	
 	//set up LED object
 	printf("Creating led object...\t");
-	initLEDs(&leds, totalPixels, bytesPerPixel, 255);
+	initLEDs(&leds, totalPixels, bytesPerPixel,1);
 	printf("Frame Length\t%d\r\n", leds._frameLength);
 
 	//set up colours
@@ -321,13 +385,10 @@ void apa102_main()
 	printf("Sending SPI data block to clear all pixels....\r\n");
 	spi_device_queue_trans(spi, &spiTransObject, portMAX_DELAY);
 	printf("Pixels Cleared!\r\n");
-	tmpColour[0]=0;
-	tmpColour[1]=255;
-	tmpColour[2]=0;
 	for(cnt=totalPixels-1; cnt>0; cnt--)
 		{
 			//getPixel(&leds, cnt-1, tmpColour);
-			setPixel(&leds, cnt, tmpColour,255);
+			setPixel(&leds, cnt, tmpColour[1],255);
 		}
 		renderLEDs();
 
@@ -337,81 +398,8 @@ void apa102_main()
 	int orange=0;
 	int down =1;
 	int stop=0;
-
-	
-
-
-	while(1)
-	{
-		//cont = gpio_get_level(GPIO_INPUT_IO_0);
-        //printf("lvl: %d\n", cont);
-		
-		//getColour(&dynColObject, cIndex%dynColObject._bandWidth, tmpColour);
-		//setPixel(&leds, 0, tmpColour);
-		if(down==1){
-			tmpColour[0]=0;
-			tmpColour[1]=0;
-			tmpColour[2]=0;
-			
-			//getPixel(&leds, cnt-1, tmpColour);
-			setPixel(&leds, cnt, tmpColour,255);
-			renderLEDs();
-			vTaskDelay(250 / portTICK_PERIOD_MS);
-			if (cnt<30 && orange==0){
-				orange=1;
-				for(int i=cnt-2; i>0; i--)
-				{
-					tmpColour[0]=255;
-					tmpColour[1]=165;
-					tmpColour[2]=0;
-					//getPixel(&leds, cnt-1, tmpColour);
-					setPixel(&leds, i, tmpColour,255);
-				}
-			}
-			if(cnt>1){
-				cnt--;
-			}
-			else
-			{
-				down=0;
-			}
-		}
-		else if (down==0){
-
-			tmpColour[0]=255;
-			tmpColour[1]=0;
-			tmpColour[2]=0;
-			orange=0;
-			//getPixel(&leds, cnt-1, tmpColour);
-			setPixel(&leds, cnt, tmpColour,255);
-			vTaskDelay(250 / portTICK_PERIOD_MS);
-			renderLEDs();
-
-			cnt++;
-			if(cnt>totalPixels-2)
-				down=2;
-
-		}
-		else if (down==2)
-		{
-			down=2;
-		}
-		if (cont==1){
-			down=1;
-			orange=0;
-			cnt=totalPixels-1;
-			for(int i=totalPixels-1; i>0; i--)
-				{
-					tmpColour[0]=0;
-					tmpColour[1]=255;
-					tmpColour[2]=0;
-					//getPixel(&leds, cnt-1, tmpColour);
-					setPixel(&leds, i, tmpColour,255);
-				}
-				renderLEDs();
-
-		}     		
-    }	
+    xTaskCreate(tx_task3, "tx_task3", CONFIG_SYSTEM_EVENT_TASK_STACK_SIZE, NULL, 5, NULL);
+    xTaskCreate(tx_task4, "tx_task4", CONFIG_SYSTEM_EVENT_TASK_STACK_SIZE, NULL, 5, NULL);
 }
 
 void renderLEDs()

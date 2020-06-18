@@ -1,8 +1,8 @@
-# Install script for directory: /home/albatros/esp/esp-idf/components/efuse
+# Install script for directory: C:/Users/JambonEmmental/esp/components/efuse
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/usr/local")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/bootloader")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 

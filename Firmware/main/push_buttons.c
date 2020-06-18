@@ -52,15 +52,21 @@ static void IRAM_ATTR gpio_isr_handler(void *arg)
 
 int cont;
 
+int getcont(){
+    return cont;
+}
+
+
 void tx_task1(void *arg)
 {
     while (1)
     {
         cont = gpio_get_level(GPIO_INPUT_IO_0);
-        char **ch = "lvl\n"; int i;
-        send_by_BT(ch);
+        //printf("%d\n", cont);
+        /*char **ch = "lvl\n"; int i;
+        send_by_BT(ch);*/
 
-        vTaskDelay(100 / portTICK_RATE_MS);
+        vTaskDelay(100 / portTICK_PERIOD_MS);
     }
 }
 

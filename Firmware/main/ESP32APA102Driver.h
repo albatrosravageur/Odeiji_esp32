@@ -52,6 +52,6 @@ void gradientGenerator(struct colourObject *thisObject, unsigned short int colou
 void getColour(struct colourObject *thisObject, short int colourIndex, unsigned char *colourBlock);
 //Bluetooth communication functions
 void send_by_BT(char **ch);
-static void esp_spp_cb(esp_spp_cb_event_t event, esp_spp_cb_param_t *param, char *ch = "response undefined\n");
+//static void esp_spp_cb(esp_spp_cb_event_t event, esp_spp_cb_param_t *param, char *ch = "response undefined\n");
 
 #endif
