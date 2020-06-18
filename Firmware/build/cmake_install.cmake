@@ -1,8 +1,8 @@
-# Install script for directory: C:/Users/JambonEmmental/esp/Odeiji_esp32
+# Install script for directory: /home/albatros/esp/Odeiji_esp32/Firmware
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/odeiji_v1.3")
+  set(CMAKE_INSTALL_PREFIX "/usr/local")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -34,7 +34,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("C:/Users/JambonEmmental/esp/Odeiji_esp32/build/esp-idf/cmake_install.cmake")
+  include("/home/albatros/esp/Odeiji_esp32/Firmware/build/esp-idf/cmake_install.cmake")
 
 endif()
 
@@ -46,5 +46,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/JambonEmmental/esp/Odeiji_esp32/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/albatros/esp/Odeiji_esp32/Firmware/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

@@ -25,6 +25,7 @@
 #include "esp_pthread.h"
 #include "push_buttons.h"
 #include "touch_button.h"
+#include "brightness.h"
 
 #define GPIO_INPUT_IO_0     25
 #define GPIO_INPUT_IO_1     5
@@ -225,6 +226,8 @@ int cont;
 int activated;
 int donecont=1;
 int doneactivated = 1;
+int bright_done = 1;
+int bright_cont = 1;
 
 void tx_task3(void *arg) {
 
@@ -242,7 +245,6 @@ void tx_task3(void *arg) {
         {
             donecont=1;
         }
-        
         vTaskDelay(10 / portTICK_RATE_MS);
 	}
 
@@ -263,8 +265,18 @@ void tx_task4(void *arg) {
         {
             doneactivated=1;
         }
-        
         vTaskDelay(10 / portTICK_RATE_MS);
+	}
+
+}
+void tx_bright(void *arg) {
+
+	while (1) {
+		bright_cont=get_bright_cont();
+        char spp_data[256];
+        sprintf(spp_data, "pause");//param->data_ind.len);
+        esp_spp_write(hand, strlen(spp_data), (uint8_t *)spp_data);
+        vTaskDelay(PERIOD_BRIGHT_MS / portTICK_RATE_MS);
 	}
 
 }
@@ -332,7 +344,6 @@ void apa102_main()
     esp_bt_pin_code_t pin_code;
     esp_bt_gap_set_pin(pin_type, 0, pin_code);
 
-	
 	int     read_raw;
     esp_err_t r;
     gpio_config_t io_conf;
@@ -400,6 +411,7 @@ void apa102_main()
 	int stop=0;
     xTaskCreate(tx_task3, "tx_task3", CONFIG_SYSTEM_EVENT_TASK_STACK_SIZE, NULL, 5, NULL);
     xTaskCreate(tx_task4, "tx_task4", CONFIG_SYSTEM_EVENT_TASK_STACK_SIZE, NULL, 5, NULL);
+    xTaskCreate(tx_bright, "tx_bright", CONFIG_SYSTEM_EVENT_TASK_STACK_SIZE, NULL, 5, NULL);
 }
 
 void renderLEDs()

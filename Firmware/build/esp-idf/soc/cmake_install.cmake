@@ -1,8 +1,8 @@
-# Install script for directory: C:/Users/JambonEmmental/esp/components/soc
+# Install script for directory: /home/albatros/esp/esp-idf/components/soc
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/odeiji_v1.3")
+  set(CMAKE_INSTALL_PREFIX "/usr/local")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -30,5 +30,12 @@ endif()
 # Is this installation the result of a crosscompile?
 if(NOT DEFINED CMAKE_CROSSCOMPILING)
   set(CMAKE_CROSSCOMPILING "TRUE")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for each subdirectory.
+  include("/home/albatros/esp/Odeiji_esp32/Firmware/build/esp-idf/soc/src/esp32/cmake_install.cmake")
+  include("/home/albatros/esp/Odeiji_esp32/Firmware/build/esp-idf/soc/soc/cmake_install.cmake")
+
 endif()
 
