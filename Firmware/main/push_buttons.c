@@ -62,7 +62,10 @@ void tx_task1(void *arg)
     while (1)
     {
         cont = gpio_get_level(GPIO_INPUT_IO_0);
-        //printf("%d\n", cont);
+        if(cont==1){
+            printf("%d\n", cont);
+        }
+        
         /*char **ch = "lvl\n"; int i;
         send_by_BT(ch);*/
 
@@ -92,5 +95,5 @@ void push_main(void)
     gpio_set_intr_type(GPIO_INPUT_IO_0, GPIO_INTR_ANYEDGE);
 
     //create a queue to handle gpio event from isr
-    gpio_evt_queue = xQueueCreate(10, sizeof(uint32_t));
+    xTaskCreate(tx_task1, "tx_task1", CONFIG_SYSTEM_EVENT_TASK_STACK_SIZE, NULL, 3, NULL);
 }

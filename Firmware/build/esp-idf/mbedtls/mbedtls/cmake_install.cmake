@@ -1,8 +1,8 @@
-# Install script for directory: /home/albatros/esp/esp-idf/components/mbedtls/mbedtls
+# Install script for directory: C:/Users/JambonEmmental/esp/components/mbedtls/mbedtls
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/usr/local")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/odeiji_v1.3")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -34,8 +34,8 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/albatros/esp/Odeiji_esp32/Firmware/build/esp-idf/mbedtls/mbedtls/library/cmake_install.cmake")
-  include("/home/albatros/esp/Odeiji_esp32/Firmware/build/esp-idf/mbedtls/mbedtls/include/cmake_install.cmake")
+  include("C:/Users/JambonEmmental/esp/Odeiji_esp32/build/esp-idf/mbedtls/mbedtls/library/cmake_install.cmake")
+  include("C:/Users/JambonEmmental/esp/Odeiji_esp32/build/esp-idf/mbedtls/mbedtls/include/cmake_install.cmake")
 
 endif()
 

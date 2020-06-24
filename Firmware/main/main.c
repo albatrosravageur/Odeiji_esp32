@@ -16,11 +16,10 @@
 //#include "bluetooth.h"
 #include "ESP32APA102Driver.h"
 #include "push_buttons.h"
-#include "brightness.h"
 
 void app_main(void)
 {
-    bright_main();
+    
     touch_main();
     push_main();
     apa102_main();
