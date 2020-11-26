@@ -1,0 +1,27 @@
+{
+	"folders": [
+		{
+			"name": "esp32server",
+			"path": ".."
+		}
+	],
+	"settings": {
+		"git.ignoreLimitWarning": true,
+		"files.associations": {
+			"chrono": "cpp",
+			"array": "cpp",
+			"deque": "cpp",
+			"string": "cpp",
+			"unordered_map": "cpp",
+			"unordered_set": "cpp",
+			"vector": "cpp",
+			"string_view": "cpp",
+			"initializer_list": "cpp",
+			"list": "cpp",
+			"regex": "cpp"
+		},
+		"cSpell.words": [
+			"println"
+		]
+	}
+}
