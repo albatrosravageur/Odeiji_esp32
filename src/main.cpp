@@ -39,44 +39,57 @@
 
 #include <task.h>
 
-
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
 #error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
 #endif
 
 // Pin attribution
-void setup_pin(){
-  pinMode(PUSH_BUTTON, INPUT); //set pushbutton pin as a reader
+void setup_pin()
+{
   pinMode(FB_LED_PIN, OUTPUT);
   pinMode(TOUCH_PIN, INPUT);
 }
 
+// Create task handles
 TaskHandle_t fire_task;
 TaskHandle_t led_task;
 TaskHandle_t bt_task;
+TaskHandle_t touch_task;
 
 void setup()
 {
   // Begin serial
-  Serial.begin(9600);
+  Serial.begin(115200);
   delay(500);
 
   // Setup pins
   setup_pin();
+
   // Setup time
-  //setTime(0);
+  setTime(0);
 
-  xTaskCreatePinnedToCore(fire_loop, "Firebase Task",  12000 ,  NULL  ,5, &fire_task, 0);
-  xTaskCreatePinnedToCore(led_loop, "LED Task",  12000 ,  NULL ,3, &led_task, 0);
-  xTaskCreatePinnedToCore(bt_loop, "Bluetooth Task",  12000 ,  NULL  ,5, &bt_task, 0);
-
+  //  Setup bluetooth
+  /*bt_setup();
+  xTaskCreatePinnedToCore(bt_loop, "Bluetooth Task",10000, NULL, 5, &bt_task, 0);
+  Serial.println("Bluetooth is set \n");
+*/
+  // Setup Firebase
   fire_setup();
+  xTaskCreatePinnedToCore(fire_loop, "Firebase Task", 12000, NULL, 5, &fire_task, 0);
+  Serial.println("Firebase is set \n");
+
+  // Setup touch button
   touch_setup();
+  xTaskCreatePinnedToCore(touch_loop, "Touch task", 2048, NULL, 1, &touch_task, 1);
+  Serial.println("Touch is set \n");
+
+  // Setup leds control
   led_setup();
-  bt_setup();
+  xTaskCreatePinnedToCore(led_loop, "LED Task", 5000, NULL, 3, &led_task, 1);
+  Serial.println("Led is set \n");
 }
 
 void loop()
 {
-    vTaskDelay(10);
+  vTaskDelay(10);
 }

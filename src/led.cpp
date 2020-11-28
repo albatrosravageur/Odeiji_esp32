@@ -64,9 +64,11 @@ void led_loop(void *pvParameters)
         startIndex = startIndex + 1; /* motion speed */
         
         FillLEDsFromPaletteColors( startIndex);
+        Serial.println("I was in the led loop");
         
         FastLED.show();
         FastLED.delay(1000 / UPDATES_PER_SECOND);
+
     }
 }
 

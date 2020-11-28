@@ -53,8 +53,15 @@ Firebase.setString("LED_STATUS", "OFF");                                        
 
 void fire_loop(void* pvParameters) {
   while(1){
-    point_duration = Firebase.getInt("/playground/meetings/M5Q1AFT33/points/0/duration");
-    Serial.println(point_duration);
-    delay(500);
+    try{
+      point_duration = Firebase.getInt("/playground/meetings/M5Q1AFT33/points/0/duration");
+      Serial.println(point_duration);
+      throw point_duration;
+    }
+    catch(...){
+        Serial.println("Unable to write in the database\n");
+    }
+    Serial.println("I was in the firebase loop\n");
+    delay(2000);
   }
 }

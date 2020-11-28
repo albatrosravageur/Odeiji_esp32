@@ -18,16 +18,12 @@
 #include "Utilitaires.h"
 #include "Arduino.h"
 
-static const char *TAG = "Touch pad";
-
 #define TOUCH_THRESH_NO_USE (0)
 #define TOUCH_THRESH_PERCENT (80)
 #define TOUCHPAD_FILTER_TOUCH_PERIOD (10)
 
-static bool s_pad_activated;
-static uint16_t s_pad_init_val;
-TaskHandle_t touch_task;
-
+bool s_pad_activated;
+uint16_t s_pad_init_val;
 
 /*
   Read values sensed at all available touch pads.
@@ -38,7 +34,7 @@ TaskHandle_t touch_task;
   Do not touch any pads when this routine
   is running (on application start).
  */
-static void tp_example_set_thresholds(void)
+void tp_example_set_thresholds(void)
 {
     uint16_t touch_value;
     //read filtered value
@@ -64,11 +60,8 @@ static void tp_example_set_thresholds(void)
   The difference caused by a 'touch' action could be very small, but we can still use
   filter mode to detect a 'touch' event.
  */
-static void touch_loop(void *pvParameter)
+void touch_loop(void *pvParameter)
 {
-    static int show_message;
-    int change_mode = 0;
-    int filter_mode = 0;
     while (1)
     {
         //interrupt mode, enable touch interrupt
@@ -77,22 +70,22 @@ static void touch_loop(void *pvParameter)
         {
             ESP_LOGI(TAG, "T7 activated! \n");
             // Wait a while for the pad being released
-            vTaskDelay(250);
+            delay(250);
             // Clear information on pad activation
             s_pad_activated = false;
             // Reset the counter triggering a message
             // that application is running
-            show_message = 1;
         }
     }
-    vTaskDelay(50);
+    Serial.println("I was in the touch loop\n");
+    delay(50);
 }
 
 /*
   Handle an interrupt triggered when a pad is touched.
   Recognize what pad has been touched and save it in a table.
  */
-static void tp_example_rtc_intr(void *arg)
+void tp_example_rtc_intr(void *arg)
 {
     uint32_t pad_intr = touch_pad_get_status();
     //clear interrupt
@@ -105,7 +98,7 @@ static void tp_example_rtc_intr(void *arg)
 /*
  * Before reading touch pad, we need to initialize the RTC IO.
  */
-static void tp_example_touch_pad_init(void)
+void tp_example_touch_pad_init(void)
 {
     //init RTC IO and mode for touch pad.
     touch_pad_config(TOUCH_PIN, TOUCH_THRESH_NO_USE);
@@ -120,7 +113,7 @@ void touch_setup(void)
     touch_pad_set_fsm_mode(TOUCH_FSM_MODE_TIMER);
     // Set reference voltage for charging/discharging
     // For most usage scenarios, we recommend using the following combination:
-    // the high reference valtage will be 2.7V - 1V = 1.7V, The low reference voltage will be 0.5V.
+    // the high reference voltage will be 2.7V - 1V = 1.7V, The low reference voltage will be 0.5V.
     touch_pad_set_voltage(TOUCH_HVOLT_2V7, TOUCH_LVOLT_0V5, TOUCH_HVOLT_ATTEN_1V);
     // Init touch pad IO
     tp_example_touch_pad_init();
@@ -130,7 +123,4 @@ void touch_setup(void)
     tp_example_set_thresholds();
     // Register touch interrupt ISR
     touch_pad_isr_register(tp_example_rtc_intr, NULL);
-
-    xTaskCreatePinnedToCore(touch_loop, "Touch task", 2048, NULL, 1, &touch_task, 0);
-
 }
