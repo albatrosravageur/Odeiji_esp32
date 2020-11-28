@@ -13,3 +13,4 @@ void ChangePalettePeriodically();
 void SetupTotallyRandomPalette();
 void SetupBlackAndWhiteStripedPalette();
 void FillLEDsFromPaletteColors( uint8_t colorIndex);
+void linear_display(int nb_leds, uint32_t color);

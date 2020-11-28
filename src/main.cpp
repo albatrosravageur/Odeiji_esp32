@@ -31,7 +31,7 @@
 #endif
 
 #ifndef bt_h
-#include <bt.h>
+//#include <bt.h>
 #define bt_h
 #endif
 
@@ -73,6 +73,7 @@ void setup()
   xTaskCreatePinnedToCore(bt_loop, "Bluetooth Task",10000, NULL, 5, &bt_task, 0);
   Serial.println("Bluetooth is set \n");
 */
+  Serial.println("Start setups");
   // Setup Firebase
   fire_setup();
   xTaskCreatePinnedToCore(fire_loop, "Firebase Task", 12000, NULL, 5, &fire_task, 0);
@@ -85,7 +86,7 @@ void setup()
 
   // Setup leds control
   led_setup();
-  xTaskCreatePinnedToCore(led_loop, "LED Task", 5000, NULL, 3, &led_task, 1);
+  xTaskCreatePinnedToCore(led_loop, "LED Task", 5000, NULL, 3, &led_task, 0);//(void *)&get_point_duration, 3, &led_task, 0);
   Serial.println("Led is set \n");
 }
 

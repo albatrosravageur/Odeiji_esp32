@@ -1,6 +1,6 @@
 
 #ifndef Firebase_h
-#include <IOXhop_FirebaseESP32.h>                                             // firebase library
+#include <IOXhop_FirebaseESP32.h> // firebase library
 #define Firebase_h
 #endif
 
@@ -23,20 +23,34 @@
 
 #define Firebase_h
 
-#define FIREBASE_HOST "odeji-6a294.firebaseio.com"                         // the project name address from firebase id
-#define FIREBASE_AUTH "Vh2ojPFvUNp7PItyQMwJ32erPMI3DR1gPzjJnnSf"                    // the secret key generated from firebase
-#define WIFI_SSID "oue-oue"                                          // input your home or public wifi name
-#define WIFI_PASSWORD "cbonnard"                                    //password of wifi ssid
+#define FIREBASE_HOST "odeji-6a294.firebaseio.com"               // the project name address from firebase id
+#define FIREBASE_AUTH "Vh2ojPFvUNp7PItyQMwJ32erPMI3DR1gPzjJnnSf" // the secret key generated from firebase
+#define WIFI_SSID "oue-oue"                                      // input your home or public wifi name
+#define WIFI_PASSWORD "cbonnard"                                 //password of wifi ssid
 
-int point_duration;
-                                               // led status received from firebase
-void fire_setup() {
+class Fire_attributes
+{
+public:
+  int point_duration = END_OF_AGENDA;
+  bool point_changed = true;
+};
 
-  WiFi.begin (WIFI_SSID, WIFI_PASSWORD);                                      //try to connect with wifi
+Fire_attributes attributes;
+
+int get_point_duration()
+{
+  return attributes.point_duration;
+}
+// led status received from firebase
+void fire_setup()
+{
+
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD); //try to connect with wifi
   Serial.print("Connecting to ");
   Serial.print(WIFI_SSID);
 
-  while (WiFi.status() != WL_CONNECTED) {
+  while (WiFi.status() != WL_CONNECTED)
+  {
     Serial.print(".");
     delay(500);
   }
@@ -45,23 +59,25 @@ void fire_setup() {
   Serial.print("Connected to ");
   Serial.println(WIFI_SSID);
   Serial.print("IP Address is : ");
-  Serial.println(WiFi.localIP());                                                      //print local IP address
+  Serial.println(WiFi.localIP()); //print local IP address
 
-Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);                                       // connect to firebase
-Firebase.setString("LED_STATUS", "OFF");                                          //send initial string of led status
+  Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH); // connect to firebase
+  Firebase.setInt(PATHTOPOINTS + String("0/duration"), 10);
+  Firebase.setInt(PATHTOPOINTS + String("1/duration"), 15);
+  Firebase.setInt(PATHTOPOINTS + String("2/duration"), 5);
 }
 
-void fire_loop(void* pvParameters) {
-  while(1){
-    try{
-      point_duration = Firebase.getInt("/playground/meetings/M5Q1AFT33/points/0/duration");
-      Serial.println(point_duration);
-      throw point_duration;
+void fire_loop(void *pvParameters)
+{
+  while (1)
+  {
+    static int point_number = 0;
+    attributes.point_duration = Firebase.getInt(PATHTOPOINTS + String(point_number) + "/duration");
+    Serial.println("I was in the firebase loop, and I have read this point duration: " + String(attributes.point_duration));
+    if (attributes.point_changed)
+    {
+      attributes.point_changed = false;
     }
-    catch(...){
-        Serial.println("Unable to write in the database\n");
-    }
-    Serial.println("I was in the firebase loop\n");
     delay(2000);
   }
 }

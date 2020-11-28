@@ -1,87 +1,117 @@
-#ifndef NeoPixel
 #include <Adafruit_NeoPixel.h>
-#define NeoPixel
-#endif
 
-#ifndef Arduino
 #include <Arduino.h>
-#define Arduino
-#endif
 
-#ifndef Utilitaires_h
 #include <Utilitaires.h>
-#define Utilitaires_h
-#endif
 
-#ifndef Wifi_h
 #include <WiFi.h>
-#define Wifi_h
-#endif
 
-#ifndef HTTP_h
 #include <HTTPClient.h>
-#define HTTP_h
-#endif
+
 #include <TimeLib.h>
 
-#ifndef fastLED_h
 #include <FastLED.h>
-#define fastLED_h
-#endif
 
 #include <TimeLib.h>
 
 #include <task.h>
-
+#include <colorutils.h>
 #include <led.h>
+#include <TimeLib.h>
 #define Led_h
 
 CRGB leds[NUM_LEDS];
 
 CRGBPalette16 currentPalette;
-TBlendType    currentBlending;
+TBlendType currentBlending;
 
 extern CRGBPalette16 myRedWhiteBluePalette;
-extern const TProgmemPalette16 myRedWhiteBluePalette_p PROGMEM;
 
+time_t last_reset = now();
+class Led
+{
+    public:
+    int point_duration = 0;
+    uint8_t brightness = 255;
+};
 
-void led_setup() {
-    delay( 1000 ); // power-up safety delay
-    FastLED.addLeds<LED_TYPE, LEDS_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection( TypicalLEDStrip );
-    FastLED.setBrightness(  BRIGHTNESS );
-    
+Led led;
+
+void led_setup()
+{
+    delay(1000); // power-up safety delay
+    FastLED.addLeds<LED_TYPE, LEDS_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
+    FastLED.setBrightness(BRIGHTNESS);
+
     currentPalette = RainbowColors_p;
     currentBlending = LINEARBLEND;
 }
 
-
 void led_loop(void *pvParameters)
 {
-        while(1){
-        ChangePalettePeriodically();
-        
-        static uint8_t startIndex = 0;
-        startIndex = startIndex + 1; /* motion speed */
-        
-        FillLEDsFromPaletteColors( startIndex);
-        Serial.println("I was in the led loop");
-        
+    int firebase_input = (uint32_t)pvParameters;
+
+    if (firebase_input == NO_NEW_POINT) // nothing happens, no point has been added or changed
+        if (firebase_input == END_OF_AGENDA)
+        { // end of agenda, show demo leds
+            led.point_duration = 0;
+            Serial.println("End of agenda read in led, demo time !");
+        }
+    if ((firebase_input != NO_NEW_POINT) && (firebase_input != END_OF_AGENDA))
+    {
+        Serial.println("New point has been read in leds, length is :"+String(led.point_duration));
+        led.point_duration = firebase_input;
+        last_reset = now();
+    }
+    while (1)
+    {
+        if (!led.point_duration)
+        {
+            // cool default display
+            ChangePalettePeriodically();
+
+            static uint8_t startIndex = 0;
+            startIndex = startIndex + 1; // motion speed
+
+            FillLEDsFromPaletteColors(startIndex);
+        }
+        else
+        {
+            int time_left = minute(now() - last_reset) - led.point_duration;
+            if (time_left >= 0)
+            {
+                linear_display(time_left, CRGB::Green);
+            }
+            else
+            {
+                linear_display(-time_left, CRGB::Orange);
+            }
+        }
+
         FastLED.show();
         FastLED.delay(1000 / UPDATES_PER_SECOND);
 
+        //Serial.println("I was in the led loop");
     }
 }
 
-void FillLEDsFromPaletteColors( uint8_t colorIndex)
+void linear_display(int nb_leds, uint32_t color)
 {
-    uint8_t brightness = 255;
-    
-    for( int i = 0; i < NUM_LEDS; i++) {
-        leds[i] = ColorFromPalette( currentPalette, colorIndex, brightness, currentBlending);
+
+    for (int i = 0; i < nb_leds + 1; i++)
+    {
+        leds[i] = ColorFromPalette(currentPalette, color, led.brightness, currentBlending);
+    }
+}
+
+void FillLEDsFromPaletteColors(uint8_t colorIndex)
+{
+    for (int i = 0; i < NUM_LEDS; i++)
+    {
+        leds[i] = ColorFromPalette(currentPalette, colorIndex, led.brightness, currentBlending);
         colorIndex += 3;
     }
 }
-
 
 // There are several different palettes of colors demonstrated here.
 //
@@ -93,30 +123,66 @@ void FillLEDsFromPaletteColors( uint8_t colorIndex)
 
 void ChangePalettePeriodically()
 {
-    uint8_t secondHand = (millis() / 1000) % 60;
+    uint8_t secondHand = (millis() / 1000) % 50;
     static uint8_t lastSecond = 99;
-    
-    if( lastSecond != secondHand) {
+
+    if (lastSecond != secondHand)
+    {
         lastSecond = secondHand;
-        if( secondHand ==  0)  { currentPalette = RainbowColors_p;         currentBlending = LINEARBLEND; }
-        if( secondHand == 10)  { currentPalette = RainbowStripeColors_p;   currentBlending = NOBLEND;  }
-        if( secondHand == 15)  { currentPalette = RainbowStripeColors_p;   currentBlending = LINEARBLEND; }
-        if( secondHand == 20)  { SetupPurpleAndGreenPalette();             currentBlending = LINEARBLEND; }
-        if( secondHand == 25)  { SetupTotallyRandomPalette();              currentBlending = LINEARBLEND; }
-        if( secondHand == 30)  { SetupBlackAndWhiteStripedPalette();       currentBlending = NOBLEND; }
-        if( secondHand == 35)  { SetupBlackAndWhiteStripedPalette();       currentBlending = LINEARBLEND; }
-        if( secondHand == 40)  { currentPalette = CloudColors_p;           currentBlending = LINEARBLEND; }
-        if( secondHand == 45)  { currentPalette = PartyColors_p;           currentBlending = LINEARBLEND; }
-        if( secondHand == 50)  { currentPalette = myRedWhiteBluePalette_p; currentBlending = NOBLEND;  }
-        if( secondHand == 55)  { currentPalette = myRedWhiteBluePalette_p; currentBlending = LINEARBLEND; }
+        if (secondHand == 0)
+        {
+            currentPalette = RainbowColors_p;
+            currentBlending = LINEARBLEND;
+        }
+        if (secondHand == 10)
+        {
+            currentPalette = RainbowStripeColors_p;
+            currentBlending = NOBLEND;
+        }
+        if (secondHand == 15)
+        {
+            currentPalette = RainbowStripeColors_p;
+            currentBlending = LINEARBLEND;
+        }
+        if (secondHand == 20)
+        {
+            SetupPurpleAndGreenPalette();
+            currentBlending = LINEARBLEND;
+        }
+        if (secondHand == 25)
+        {
+            SetupTotallyRandomPalette();
+            currentBlending = LINEARBLEND;
+        }
+        if (secondHand == 30)
+        {
+            SetupBlackAndWhiteStripedPalette();
+            currentBlending = NOBLEND;
+        }
+        if (secondHand == 35)
+        {
+            SetupBlackAndWhiteStripedPalette();
+            currentBlending = LINEARBLEND;
+        }
+        if (secondHand == 40)
+        {
+            currentPalette = CloudColors_p;
+            currentBlending = LINEARBLEND;
+        }
+        if (secondHand == 45)
+        {
+            currentPalette = PartyColors_p;
+            currentBlending = LINEARBLEND;
+        }
     }
 }
 
 // This function fills the palette with totally random colors.
 void SetupTotallyRandomPalette()
 {
-    for( int i = 0; i < 16; i++) {
-        currentPalette[i] = CHSV( random8(), 255, random8());
+    for (int i = 0; i < 16; i++)
+    {
+        currentPalette[i] = CHSV(random8(), 255, random8());
     }
 }
 
@@ -127,7 +193,7 @@ void SetupTotallyRandomPalette()
 void SetupBlackAndWhiteStripedPalette()
 {
     // 'black out' all 16 palette entries...
-    fill_solid( currentPalette, 16, CRGB::Black);
+    fill_solid(currentPalette, 16, CRGB::Black);
     // and set every fourth one to white.
     currentPalette[0] = CRGB::White;
     currentPalette[4] = CRGB::White;
@@ -138,61 +204,13 @@ void SetupBlackAndWhiteStripedPalette()
 // This function sets up a palette of purple and green stripes.
 void SetupPurpleAndGreenPalette()
 {
-    CRGB purple = CHSV( HUE_PURPLE, 255, 255);
-    CRGB green  = CHSV( HUE_GREEN, 255, 255);
-    CRGB black  = CRGB::Black;
+    CRGB purple = CHSV(HUE_PURPLE, 255, 255);
+    CRGB green = CHSV(HUE_GREEN, 255, 255);
+    CRGB black = CRGB::Black;
 
     currentPalette = CRGBPalette16(
-                                   green,  green,  black,  black,
-                                   purple, purple, black,  black,
-                                   green,  green,  black,  black,
-                                   purple, purple, black,  black );
+        green, green, black, black,
+        purple, purple, black, black,
+        green, green, black, black,
+        purple, purple, black, black);
 }
-
-
-const TProgmemPalette16 myRedWhiteBluePalette_p PROGMEM =
-{
-    CRGB::Red,
-    CRGB::Gray, // 'white' is too bright compared to red and blue
-    CRGB::Blue,
-    CRGB::Black,
-    
-    CRGB::Red,
-    CRGB::Gray,
-    CRGB::Blue,
-    CRGB::Black,
-    
-    CRGB::Red,
-    CRGB::Red,
-    CRGB::Gray,
-    CRGB::Gray,
-    CRGB::Blue,
-    CRGB::Blue,
-    CRGB::Black,
-    CRGB::Black
-};
-
-
-
-
-// Additionl notes on FastLED compact palettes:
-//
-// Normally, in computer graphics, the palette (or "color lookup table")
-// has 256 entries, each containing a specific 24-bit RGB color.  You can then
-// index into the color palette using a simple 8-bit (one byte) value.
-// A 256-entry color palette takes up 768 bytes of RAM, which on Arduino
-// is quite possibly "too many" bytes.
-//
-// FastLED does offer traditional 256-element palettes, for setups that
-// can afford the 768-byte cost in RAM.
-//
-// However, FastLED also offers a compact alternative.  FastLED offers
-// palettes that store 16 distinct entries, but can be accessed AS IF
-// they actually have 256 entries; this is accomplished by interpolating
-// between the 16 explicit entries to create fifteen intermediate palette
-// entries between each pair.
-//
-// So for example, if you set the first two explicit entries of a compact 
-// palette to Green (0,255,0) and Blue (0,0,255), and then retrieved 
-// the first sixteen entries from the virtual palette (of 256), you'd get
-// Green, followed by a smooth gradient from green-to-blue, and then Blue.
