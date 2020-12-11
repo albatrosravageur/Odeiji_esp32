@@ -1,6 +1,6 @@
-void led_loop(void *pvParameters);
+//void led_loop(void *pvParameters);
 void led_setup();
-
+void led_demo();
 
 // This example shows how to set up a static color palette
 // which is stored in PROGMEM (flash), which is almost always more

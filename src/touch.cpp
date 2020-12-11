@@ -16,6 +16,7 @@
 //#include "soc/sens_periph.h"
 #include "touch.h"
 #include "Utilitaires.h"
+#include "firebase.h"
 #include "Arduino.h"
 
 #define TOUCH_THRESH_NO_USE (0)
@@ -38,11 +39,11 @@ void tp_example_set_thresholds(void)
 {
     uint16_t touch_value;
     //read filtered value
-    touch_pad_read_filtered(TOUCH_PIN, &touch_value);
+    touch_pad_read_filtered(TOUCH_PAD_NUM7, &touch_value);
     s_pad_init_val = touch_value;
     ESP_LOGI(TAG, "test init: touch pad val is " + String(touch_value) + "\n");
     //set interrupt threshold.
-    ESP_ERROR_CHECK(touch_pad_set_thresh(TOUCH_PIN, touch_value * 2 / 3));
+    ESP_ERROR_CHECK(touch_pad_set_thresh(TOUCH_PAD_NUM7, touch_value *2/3));
 }
 
 /*
@@ -75,10 +76,10 @@ void touch_loop(void *pvParameter)
             s_pad_activated = false;
             // Reset the counter triggering a message
             // that application is running
+            fire_go_to_next_point();
         }
+    delay(10);
     }
-    Serial.println("I was in the touch loop\n");
-    delay(50);
 }
 
 /*
@@ -101,7 +102,7 @@ void tp_example_rtc_intr(void *arg)
 void tp_example_touch_pad_init(void)
 {
     //init RTC IO and mode for touch pad.
-    touch_pad_config(TOUCH_PIN, TOUCH_THRESH_NO_USE);
+    touch_pad_config(TOUCH_PAD_NUM7, TOUCH_THRESH_NO_USE);
 }
 
 void touch_setup(void)
