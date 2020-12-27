@@ -54,21 +54,23 @@ void setup()
   setTime(0);
   Serial.println("Start setups");
   //  Setup bluetooth
-
   bt_setup();
+  Serial.println("Bluetooth is set \n");
 
 
   // Setup touch button
-  /*pinMode(TOUCH_PIN, INPUT);
-  touch_setup();
-  xTaskCreatePinnedToCore(touch_loop, "Touch task", 2048, NULL, 4, &touch_task, 1);
+  pinMode(TOUCH_PIN, INPUT);
+  /*touch_setup();
+  xTaskCreatePinnedToCore(touch_loop, "Touch task", 2048, NULL, 4, &touch_task, 0);
   Serial.println("Touch is set \n");*/
 
   // Setup leds control
- // pinMode(LEDS_PIN, OUTPUT);
   led_setup();
- // xTaskCreatePinnedToCore(led_loop, "LED Task", 5000, NULL, 1, &led_task, 0);//(void *)&get_point_duration, 3, &led_task, 0);
   Serial.println("Led is set \n");
+
+  // Setup firebase control
+ // fire_setup();
+ // Serial.println("Firebase is set \n");
 }
 
 void loop() {

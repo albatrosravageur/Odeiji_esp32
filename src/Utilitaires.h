@@ -6,8 +6,6 @@
 #define DEVICE_NAME "Odeji"
 
 #define FB_LED_PIN A4
-#define PATHTOPOINTS "/playground/meetings/M5Q1AFT33/agenda/points/"
-#define PATHTOMETADATA "/playground/meetings/M5Q1AFT33/agenda/"
 #define MAX_AGENDA_SIZE 250
 
 #define BRIGHTNESS  64
@@ -18,7 +16,8 @@
 enum firebase_to_led_indicator{
     NO_NEW_POINT =  255,
     AGENDA_ON_PAUSE = 254,
-    END_OF_AGENDA = 0
+    END_OF_AGENDA = 0,
+    MAX_TIME = 100 //for a point
 };
 #define TOUCH_PIN TOUCH_PAD_NUM7_GPIO_NUM
 

@@ -17,7 +17,6 @@ void bt_setup()
 {
     SerialBT.begin(DEVICE_NAME); //Bluetooth device name
     xTaskCreatePinnedToCore(bt_loop, "Bluetooth Task",10000, NULL, 5, &bt_task, 0);
-    Serial.println("Bluetooth is set \n");
 }
 
 void bt_loop(void *pvParameters)
@@ -57,6 +56,7 @@ void bt_loop(void *pvParameters)
                 vTaskDelete(bt_task);
                 break;
             case DO_DEMO_LEDS:
+                Serial.println("Running led demo");
                 led_demo();
                 break;
             }

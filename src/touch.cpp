@@ -43,7 +43,7 @@ void tp_example_set_thresholds(void)
     s_pad_init_val = touch_value;
     ESP_LOGI(TAG, "test init: touch pad val is " + String(touch_value) + "\n");
     //set interrupt threshold.
-    ESP_ERROR_CHECK(touch_pad_set_thresh(TOUCH_PAD_NUM7, touch_value *2/3));
+    ESP_ERROR_CHECK(touch_pad_set_thresh(TOUCH_PAD_NUM7, touch_value * 4 / 5));
 }
 
 /*
@@ -63,22 +63,46 @@ void tp_example_set_thresholds(void)
  */
 void touch_loop(void *pvParameter)
 {
+    bool flag1 = 0;
+    bool flag2 = 0;
     while (1)
     {
         //interrupt mode, enable touch interrupt
         touch_pad_intr_enable();
         if (s_pad_activated)
         {
+            if (flag1)
+            {
+                flag2 = 1;
+            }
+            else
+            {
+                flag1 = 1;
+            }
             ESP_LOGI(TAG, "T7 activated! \n");
             // Wait a while for the pad being released
-            delay(250);
+            delay(1000);
             // Clear information on pad activation
             s_pad_activated = false;
             // Reset the counter triggering a message
             // that application is running
-            fire_go_to_next_point();
+            fire_go_next();
         }
-    delay(10);
+        else
+        {
+            if (flag2)
+            {
+                fire_go_next();
+            }
+            else if (flag1)
+            {
+                fire_play_pause();
+            }
+            flag1 = 0;
+            flag2 = 0;
+        }
+
+        delay(50);
     }
 }
 
@@ -91,7 +115,8 @@ void tp_example_rtc_intr(void *arg)
     uint32_t pad_intr = touch_pad_get_status();
     //clear interrupt
     touch_pad_clear_status();
-    if ((pad_intr >> TOUCH_PAD_NUM7)& 0x01) {
+    if ((pad_intr >> TOUCH_PAD_NUM7) & 0x01)
+    {
         s_pad_activated = true;
     }
 }

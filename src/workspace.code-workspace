@@ -18,7 +18,8 @@
 			"string_view": "cpp",
 			"initializer_list": "cpp",
 			"list": "cpp",
-			"regex": "cpp"
+			"regex": "cpp",
+			"*.tcc": "cpp"
 		},
 		"cSpell.words": [
 			"ATTEN",
