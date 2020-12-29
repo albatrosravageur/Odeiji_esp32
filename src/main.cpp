@@ -57,20 +57,15 @@ void setup()
   bt_setup();
   Serial.println("Bluetooth is set \n");
 
-
   // Setup touch button
   pinMode(TOUCH_PIN, INPUT);
-  /*touch_setup();
+  touch_setup();
   xTaskCreatePinnedToCore(touch_loop, "Touch task", 2048, NULL, 4, &touch_task, 0);
-  Serial.println("Touch is set \n");*/
+  Serial.println("Touch is set \n");
 
   // Setup leds control
   led_setup();
   Serial.println("Led is set \n");
-
-  // Setup firebase control
- // fire_setup();
- // Serial.println("Firebase is set \n");
 }
 
 void loop() {

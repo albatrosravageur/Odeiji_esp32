@@ -49,7 +49,7 @@ void led_setup()
 void led_demo()
 {
     // Turn the LED on, then pause
-    for (int i = 0; i < NUM_LEDS; i++)
+  /*  for (int i = 0; i < NUM_LEDS; i++)
     {
         leds[i] = CRGB::Orange;
     }
@@ -70,7 +70,7 @@ void led_demo()
     }
     FastLED.show();
 
-    delay(500);
+    delay(500);*/
     // Now turn the LED off, then pause
     for (int i = 0; i < NUM_LEDS; i++)
     {

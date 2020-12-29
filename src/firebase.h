@@ -1,8 +1,5 @@
 
-void fire_setup();
-void fire_loop(void* pvParameters);
-uint8_t state_to_display();
-void fire_go_to_next_point();
+bool fire_setup();
 void set_meeting_ID(String ID);
 String get_meeting_ID();
 void set_wifi_ssid(String ssid);
@@ -12,3 +9,6 @@ String get_wifi_password();
 void fire_go_next();
 void fire_play_pause();
 void fire_get_time();
+void connect2wifi();
+void stop_looking_for_wifi();
+void stop_firebase();

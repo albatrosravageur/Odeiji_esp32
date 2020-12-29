@@ -1,10 +1,4 @@
 
-/* Touch Pad Interrupt Example
-   This example code is in the Public Domain (or CC0 licensed, at your option.)
-   Unless required by applicable law or agreed to in writing, this
-   software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-   CONDITIONS OF ANY KIND, either express or implied.
-*/
 #include <stdio.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -24,54 +18,38 @@
 #define TOUCHPAD_FILTER_TOUCH_PERIOD (10)
 
 bool s_pad_activated;
-uint16_t s_pad_init_val;
+uint16_t threshold;
 
-/*
-  Read values sensed at all available touch pads.
-  Use 2 / 3 of read value as the threshold
-  to trigger interrupt when the pad is touched.
-  Note: this routine demonstrates a simple way
-  to configure activation threshold for the touch pads.
-  Do not touch any pads when this routine
-  is running (on application start).
- */
 void tp_example_set_thresholds(void)
 {
     uint16_t touch_value;
     //read filtered value
     touch_pad_read_filtered(TOUCH_PAD_NUM7, &touch_value);
-    s_pad_init_val = touch_value;
+    threshold = touch_value * 0.8;
     ESP_LOGI(TAG, "test init: touch pad val is " + String(touch_value) + "\n");
     //set interrupt threshold.
-    ESP_ERROR_CHECK(touch_pad_set_thresh(TOUCH_PAD_NUM7, touch_value * 4 / 5));
+    ESP_ERROR_CHECK(touch_pad_set_thresh(TOUCH_PAD_NUM7, threshold));
 }
-
-/*
-  Check if any of touch pads has been activated
-  by reading a table updated by rtc_intr()
-  If so, then print it out on a serial monitor.
-  Clear related entry in the table afterwards
-  In interrupt mode, the table is updated in touch ISR.
-  In filter mode, we will compare the current filtered value with the initial one.
-  If the current filtered value is less than 80% of the initial value, we can
-  regard it as a 'touched' event.
-  When calling touch_pad_init, a timer will be started to run the filter.
-  This mode is designed for the situation that the pad is covered
-  by a 2-or-3-mm-thick medium, usually glass or plastic.
-  The difference caused by a 'touch' action could be very small, but we can still use
-  filter mode to detect a 'touch' event.
- */
+void callback()
+{
+    //placeholder callback function
+}
 void touch_loop(void *pvParameter)
 {
     bool flag1 = 0;
     bool flag2 = 0;
+    bool flag3 = 0;
     while (1)
     {
         //interrupt mode, enable touch interrupt
         touch_pad_intr_enable();
         if (s_pad_activated)
         {
-            if (flag1)
+            if (flag2)
+            {
+                flag3 = 1;
+            }
+            else if (flag1)
             {
                 flag2 = 1;
             }
@@ -90,7 +68,13 @@ void touch_loop(void *pvParameter)
         }
         else
         {
-            if (flag2)
+            if (flag3)
+            {
+                touchAttachInterrupt(T7, callback, threshold);
+                Serial.println("Going to sleep now");
+                esp_deep_sleep_start();
+            }
+            else if (flag2)
             {
                 fire_go_next();
             }
@@ -149,4 +133,7 @@ void touch_setup(void)
     tp_example_set_thresholds();
     // Register touch interrupt ISR
     touch_pad_isr_register(tp_example_rtc_intr, NULL);
+
+    //Deep sleep mode part
+    esp_sleep_enable_touchpad_wakeup();
 }
