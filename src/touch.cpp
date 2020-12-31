@@ -12,81 +12,122 @@
 #include "Utilitaires.h"
 #include "firebase.h"
 #include "Arduino.h"
+#include <led.h>
 
 #define TOUCH_THRESH_NO_USE (0)
 #define TOUCH_THRESH_PERCENT (80)
-#define TOUCHPAD_FILTER_TOUCH_PERIOD (10)
 
 bool s_pad_activated;
 uint16_t threshold;
+TaskHandle_t touch_task;
 
 void tp_example_set_thresholds(void)
 {
     uint16_t touch_value;
     //read filtered value
-    touch_pad_read_filtered(TOUCH_PAD_NUM7, &touch_value);
+    touch_pad_read_filtered(TOUCH_NUM, &touch_value);
     threshold = touch_value * 0.8;
     ESP_LOGI(TAG, "test init: touch pad val is " + String(touch_value) + "\n");
     //set interrupt threshold.
-    ESP_ERROR_CHECK(touch_pad_set_thresh(TOUCH_PAD_NUM7, threshold));
+    ESP_ERROR_CHECK(touch_pad_set_thresh(TOUCH_NUM, threshold));
 }
+
 void callback()
 {
-    //placeholder callback function
+    //just a placeholder
 }
+
 void touch_loop(void *pvParameter)
 {
-    bool flag1 = 0;
-    bool flag2 = 0;
-    bool flag3 = 0;
+    bool flagPP = 0;
+    bool flagNext = 0;
+    bool flagOff = 0;
+    int count = 0;
+    bool joker = 0;
+
     while (1)
     {
         //interrupt mode, enable touch interrupt
         touch_pad_intr_enable();
-        if (s_pad_activated)
+        if (s_pad_activated || joker)
         {
-            if (flag2)
+            // if one step misses it's ok
+            if (!s_pad_activated)
             {
-                flag3 = 1;
-            }
-            else if (flag1)
-            {
-                flag2 = 1;
+                joker = 0;
             }
             else
             {
-                flag1 = 1;
+                joker = 1;
             }
+            count++;
+            // Set flag corresponding to how long the count has been made
+            if (count >= TIME_OFF_MS / TOUCH_REFRESH_PERIOD)
+            {
+                if (!flagOff)
+                    Serial.println("FlagOff is set on");
+                flagOff = 1;
+            }
+
+            else if (count >= TIME_NEXT_MS / TOUCH_REFRESH_PERIOD)
+            {
+                if (!flagNext)
+                {
+                    Serial.println("FlagNext is set on");
+                    flagNext = 1;
+                }
+                led_red_loading(int((count * TOUCH_REFRESH_PERIOD - TIME_NEXT_MS) * (NUM_LEDS + 4) / 1000));
+            }
+
+            else if (count >= TIME_PP_MS / TOUCH_REFRESH_PERIOD)
+            {
+                if (!flagPP)
+                {
+                    Serial.println("FlagPlayPause is set on");
+                    flagPP = 1;
+                }
+                led_green_loading(int((count * TOUCH_REFRESH_PERIOD - TIME_PP_MS) * (NUM_LEDS + 1) / 1000));
+            }
+            else
+            {
+                led_yellow_loading(int((count * TOUCH_REFRESH_PERIOD * (NUM_LEDS + 1)) / 1000));
+            }
+
             ESP_LOGI(TAG, "T7 activated! \n");
-            // Wait a while for the pad being released
-            delay(1000);
-            // Clear information on pad activation
-            s_pad_activated = false;
-            // Reset the counter triggering a message
-            // that application is running
-            fire_go_next();
         }
         else
         {
-            if (flag3)
+            if (flagOff)
             {
-                touchAttachInterrupt(T7, callback, threshold);
+                touchAttachInterrupt(TOUCH_NUM, callback, threshold);
                 Serial.println("Going to sleep now");
+                led_red_blink();
+                Serial.flush();
+                clear_display();
                 esp_deep_sleep_start();
             }
-            else if (flag2)
+            else if (flagNext)
             {
                 fire_go_next();
+                led_green_blink();
             }
-            else if (flag1)
+            else if (flagPP)
             {
                 fire_play_pause();
+                led_yellow_blink();
             }
-            flag1 = 0;
-            flag2 = 0;
-        }
+            else if (count)
+                clear_display();
 
-        delay(50);
+            flagPP = 0;
+            flagNext = 0;
+            flagOff = 0;
+            count = 0;
+        }
+        // Clear information on pad activation
+        s_pad_activated = false;
+        // Wait a while for the pad being released
+        delay(TOUCH_REFRESH_PERIOD);
     }
 }
 
@@ -99,7 +140,7 @@ void tp_example_rtc_intr(void *arg)
     uint32_t pad_intr = touch_pad_get_status();
     //clear interrupt
     touch_pad_clear_status();
-    if ((pad_intr >> TOUCH_PAD_NUM7) & 0x01)
+    if ((pad_intr >> TOUCH_NUM) & 0x01)
     {
         s_pad_activated = true;
     }
@@ -111,11 +152,14 @@ void tp_example_rtc_intr(void *arg)
 void tp_example_touch_pad_init(void)
 {
     //init RTC IO and mode for touch pad.
-    touch_pad_config(TOUCH_PAD_NUM7, TOUCH_THRESH_NO_USE);
+    touch_pad_config(TOUCH_NUM, TOUCH_THRESH_NO_USE);
 }
 
 void touch_setup(void)
 {
+    // Setup pin
+    pinMode(TOUCH_PIN, INPUT);
+
     // Initialize touch pad peripheral, it will start a timer to run a filter
     ESP_LOGI(TAG, "Initializing touch pad");
     touch_pad_init();
@@ -136,4 +180,10 @@ void touch_setup(void)
 
     //Deep sleep mode part
     esp_sleep_enable_touchpad_wakeup();
+    //Don't waste the data such as wifi password and meeting ID
+    esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_SLOW_MEM, ESP_PD_OPTION_ON);
+    esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_FAST_MEM, ESP_PD_OPTION_ON);
+
+    //Start task
+    xTaskCreatePinnedToCore(touch_loop, "Touch task", 2048, NULL, TOUCH_PRIORITY, &touch_task, TOUCH_CORE);
 }

@@ -3,6 +3,7 @@
 #include <firebase.h>
 #include <Utilitaires.h>
 #include <led.h>
+#include <rtc_wake_stub_wifi.h>
 
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
 #error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
@@ -13,10 +14,33 @@
 BluetoothSerial SerialBT;
 TaskHandle_t bt_task;
 
+
+
+void callback(esp_spp_cb_event_t event, esp_spp_cb_param_t *param)
+{
+    if (event == ESP_SPP_SRV_OPEN_EVT)
+    {
+        Serial.println("Client Connected");
+        led_blue_blink();
+    }
+
+    if (event == ESP_SPP_CLOSE_EVT)
+    {
+        Serial.println("Client disconnected");
+    }
+}
+
 void bt_setup()
 {
     SerialBT.begin(DEVICE_NAME); //Bluetooth device name
-    xTaskCreatePinnedToCore(bt_loop, "Bluetooth Task", 10000, NULL, 5, &bt_task, 0);
+    SerialBT.register_callback(callback);
+
+    xTaskCreatePinnedToCore(bt_loop, "Bluetooth Task", 10000, NULL, BT_PRIORITY, &bt_task, BT_CORE);
+}
+
+void bt_send(String message)
+{
+    SerialBT.println(message);
 }
 
 void bt_loop(void *pvParameters)
@@ -45,6 +69,7 @@ void bt_loop(void *pvParameters)
                 break;
             case GET_WIFI_PASSWORD:
                 SerialBT.println(get_wifi_password());
+                break;
             case SET_MEETING_ID:
                 set_meeting_ID(message.substring(1));
                 SerialBT.println("Meeting name set to " + message.substring(1));
@@ -64,7 +89,6 @@ void bt_loop(void *pvParameters)
                 break;
             case GO_CONNECT_WIFI:
                 connect2wifi();
-                SerialBT.println("Connect to wifi...\n");
                 break;
             case STOP_LOOKING_FOR_WIFI:
                 stop_looking_for_wifi();
