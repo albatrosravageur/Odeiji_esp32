@@ -6,3 +6,4 @@ void fire_go_next();
 void fire_play_pause();
 void fire_get_time();
 void stop_firebase();
+String get_firebase_state();

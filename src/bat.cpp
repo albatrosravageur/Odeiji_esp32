@@ -41,7 +41,7 @@ void set_charged()
     pinMode(LED_CHARGED_PIN, INPUT_PULLDOWN);
 }
 
-void turn_off()
+void bat_turn_off()
 {
     pinMode(LED_CHARGE_PIN, INPUT_PULLUP);
     pinMode(LED_CHARGED_PIN, INPUT_PULLUP);
@@ -50,6 +50,16 @@ void turn_off()
 int bat_get_level()
 {
     return bat.level;
+}
+
+void bat_stop()
+{
+    bat_turn_off();
+    if (bat_task != NULL)
+    {
+        vTaskDelete(bat_task);
+        bat_task = NULL;
+    }
 }
 
 void bat_loop(void *pvParameters)

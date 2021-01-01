@@ -13,6 +13,9 @@
 #include "firebase.h"
 #include "Arduino.h"
 #include <led.h>
+#include <wifi.h>
+#include <bt.h>
+#include <bat.h>
 
 #define TOUCH_THRESH_NO_USE (0)
 #define TOUCH_THRESH_PERCENT (80)
@@ -35,6 +38,21 @@ void tp_example_set_thresholds(void)
 void callback()
 {
     //just a placeholder
+}
+
+void turn_off()
+{
+    touchAttachInterrupt(TOUCH_NUM, callback, threshold*0.8); //Smaller threshold to wake up to make it sleep tight
+    Serial.println("Going to sleep now");
+    Serial.flush();
+    clear_display();
+    Serial.end();
+    stop_firebase();
+    stop_looking_for_wifi();
+    bt_stop();
+    bat_stop();
+    led_red_blink();
+    esp_deep_sleep_start();
 }
 
 void touch_loop(void *pvParameter)
@@ -99,12 +117,7 @@ void touch_loop(void *pvParameter)
         {
             if (flagOff)
             {
-                touchAttachInterrupt(TOUCH_NUM, callback, threshold);
-                Serial.println("Going to sleep now");
-                led_red_blink();
-                Serial.flush();
-                clear_display();
-                esp_deep_sleep_start();
+                turn_off();
             }
             else if (flagNext)
             {

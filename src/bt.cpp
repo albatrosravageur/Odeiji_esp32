@@ -1,9 +1,10 @@
 #include "BluetoothSerial.h"
 #include <bt.h>
 #include <firebase.h>
+#include <touch.h>
 #include <Utilitaires.h>
 #include <led.h>
-#include <rtc_wake_stub_wifi.h>
+#include <wifi.h>
 
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
 #error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
@@ -38,9 +39,20 @@ void bt_setup()
     xTaskCreatePinnedToCore(bt_loop, "Bluetooth Task", 10000, NULL, BT_PRIORITY, &bt_task, BT_CORE);
 }
 
-void bt_send(String message)
+void bt_send(int usecase)
 {
-    SerialBT.println(message);
+    switch(usecase){
+        case WIFI_CONNECTED:
+            SerialBT.println("81");
+            break;
+        case WIFI_FAILURE:
+            SerialBT.println("80");
+            break;
+    }
+}
+
+void bt_stop(){
+    SerialBT.end();
 }
 
 void bt_loop(void *pvParameters)
@@ -58,57 +70,77 @@ void bt_loop(void *pvParameters)
             {
             case SET_WIFI_SSID:
                 set_wifi_ssid(message.substring(1));
-                SerialBT.println("SSID set to " + message.substring(1));
+                SerialBT.println("0SSID set to " + message.substring(1));
                 break;
             case GET_WIFI_SSID:
-                SerialBT.println(get_wifi_ssid());
+                SerialBT.println(GET_MEETING_ID+get_wifi_ssid());
                 break;
             case SET_WIFI_PASSWORD:
                 set_wifi_password(message.substring(1));
-                SerialBT.println("Password set to " + message.substring(1));
+                SerialBT.println("2Password set to " + message.substring(1));
                 break;
             case GET_WIFI_PASSWORD:
-                SerialBT.println(get_wifi_password());
+                SerialBT.println(GET_WIFI_PASSWORD+get_wifi_password());
                 break;
             case SET_MEETING_ID:
                 set_meeting_ID(message.substring(1));
-                SerialBT.println("Meeting name set to " + message.substring(1));
+                SerialBT.println("4Meeting name set to " + message.substring(1));
                 break;
             case GET_MEETING_ID:
-                SerialBT.println(get_meeting_ID());
+                SerialBT.println(GET_MEETING_ID+get_meeting_ID());
                 break;
             case GO_CONNECT_FIREBASE:
-                if (fire_setup())
-                {
-                    SerialBT.println("Firebase is set \n");
+                if (!fire_setup()){
+                    SerialBT.println("60");
                 }
-                else
-                {
-                    SerialBT.println(UNABLE_TO_CONNECT_FIREBASE);
+                else{
+                    SerialBT.println("61");
                 }
+                // Feedback to app is asynchronous
+                break;
+            case STOP_CONNECT_MEETING:
+                stop_firebase();
+                SerialBT.println("G");
                 break;
             case GO_CONNECT_WIFI:
                 connect2wifi();
                 break;
             case STOP_LOOKING_FOR_WIFI:
                 stop_looking_for_wifi();
+                clear_display();
                 break;
             case DO_DEMO_LEDS:
                 SerialBT.println("Led demo starts");
                 led_demo();
                 SerialBT.println("Led demo finishes");
                 break;
-            case STOP_FIREBASE:
+            case DISCONNECT_FIREBASE:
                 stop_firebase();
+                SerialBT.println("7");
                 break;
             case PLAYPAUSE:
                 fire_play_pause();
+                SerialBT.println("C");
+                led_yellow_blink();
                 break;
             case NEXT:
                 fire_go_next();
+                led_green_blink();
+                SerialBT.println("D");
                 break;
+            case TURN_OFF:
+                SerialBT.println("E");
+                turn_off();
+                break;
+            case ALL_PARAMETERS:
+                String all = "F" + get_wifi_ssid() + '\n' + get_meeting_ID() + '\n' + get_wifi_state() + '\n' + get_firebase_state()+'\n';
+                SerialBT.print(all);
+                SerialBT.flush();
+                Serial.println(all);
+                break;
+           
             }
         }
-        delay(200);
+        delay(50);
     }
 }

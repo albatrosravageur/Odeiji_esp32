@@ -25,6 +25,7 @@ class Led
 {
 public:
     int8_t brightness = BRIGHTNESS;
+    bool flag = true;
 };
 
 Led led;
@@ -41,6 +42,7 @@ void led_setup()
 
 void led_demo()
 {
+    led.flag = false;
     // Turn the LED on, then pause
     for (int i = 0; i < NUM_LEDS; i++)
     {
@@ -70,18 +72,22 @@ void led_demo()
         leds[i] = CRGB::Black;
     }
     FastLED.show();
+    led.flag = true;
     delay(500);
 }
 
 void led_show_time(int nb_leds)
 {
-    if (nb_leds < 0)
+    if (led.flag)
     {
-        linear_display(-nb_leds, CRGB::Orange);
-    }
-    if (nb_leds >= 0)
-    {
-        linear_display(nb_leds + 1, CRGB::Green);
+        if (nb_leds < 0)
+        {
+            linear_display(-nb_leds, CRGB::Orange);
+        }
+        if (nb_leds >= 0)
+        {
+            linear_display(nb_leds + 1, CRGB::Green);
+        }
     }
 }
 void led_blue_loading(int time)
@@ -109,9 +115,10 @@ void led_purple_loading(int time)
     linear_display(time, CRGB::Purple);
 }
 
-
 void led_red_blink()
 {
+    led.flag = false;
+
     for (int i = 0; i < 3; i++)
     {
         linear_display(NUM_LEDS, CRGB::Red);
@@ -120,10 +127,13 @@ void led_red_blink()
         if (i < 2)
             delay(LED_BLINK_DELAY);
     }
+    led.flag = true;
 }
 
 void led_blue_blink()
 {
+    led.flag = false;
+
     for (int i = 0; i < 3; i++)
     {
         linear_display(NUM_LEDS, CRGB::Blue);
@@ -132,10 +142,13 @@ void led_blue_blink()
         if (i < 2)
             delay(LED_BLINK_DELAY);
     }
+    led.flag = true;
 }
 
 void led_green_blink()
 {
+    led.flag = false;
+
     for (int i = 0; i < 3; i++)
     {
         linear_display(NUM_LEDS, CRGB::Green);
@@ -144,10 +157,13 @@ void led_green_blink()
         if (i < 2)
             delay(LED_BLINK_DELAY);
     }
+    led.flag = true;
 }
 
 void led_yellow_blink()
 {
+    led.flag = false;
+
     for (int i = 0; i < 3; i++)
     {
         linear_display(NUM_LEDS, CRGB::Yellow);
@@ -156,10 +172,13 @@ void led_yellow_blink()
         if (i < 2)
             delay(LED_BLINK_DELAY);
     }
+    led.flag = true;
 }
 
 void led_purple_blink()
 {
+    led.flag = false;
+
     for (int i = 0; i < 3; i++)
     {
         linear_display(NUM_LEDS, CRGB::Purple);
@@ -168,6 +187,7 @@ void led_purple_blink()
         if (i < 2)
             delay(LED_BLINK_DELAY);
     }
+    led.flag = true;
 }
 
 void clear_display()

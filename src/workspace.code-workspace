@@ -19,7 +19,8 @@
 			"initializer_list": "cpp",
 			"list": "cpp",
 			"regex": "cpp",
-			"*.tcc": "cpp"
+			"*.tcc": "cpp",
+			"stdexcept": "cpp"
 		},
 		"cSpell.words": [
 			"ATTEN",

@@ -50,7 +50,7 @@
 #define LED_WIFI_PRIORITY 1
 
 // Bluetooth
-#define DEVICE_NAME "Odeji"
+#define DEVICE_NAME "Odeji-123456"
 
 enum bt_messages_type
 {
@@ -61,11 +61,17 @@ enum bt_messages_type
     SET_MEETING_ID = '4',
     GET_MEETING_ID = '5',
     GO_CONNECT_FIREBASE = '6',
-    UNABLE_TO_CONNECT_FIREBASE = '7',
+    UNABLE_TO_CONNECT_FIREBASE = '60',
+    DISCONNECT_FIREBASE = '7',
     GO_CONNECT_WIFI = '8',
+    WIFI_FAILURE = '80',
+    WIFI_CONNECTED = '81',
     STOP_LOOKING_FOR_WIFI = '9',
     STOP_FIREBASE = 'B',
     DO_DEMO_LEDS = 'A',
     PLAYPAUSE = 'C',
-    NEXT = 'D'
+    NEXT = 'D',
+    TURN_OFF = 'E',
+    ALL_PARAMETERS = 'F',
+    STOP_CONNECT_MEETING = 'G'
 };
