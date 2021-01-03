@@ -67,7 +67,7 @@ enum bt_messages_sent
 };
 
 // FREE-RTOS
-// Core repartition of threads
+// Core distribution of threads
 #define BAT_CORE 0
 #define TOUCH_CORE 0
 #define BT_CORE 0

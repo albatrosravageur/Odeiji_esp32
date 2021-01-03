@@ -45,7 +45,7 @@ void touch_turn_off_device()
     Serial.flush();
     led_clear_display();
     Serial.end();
-    fire_base();
+    fire_end();
     wifi_stop_search();
     bt_stop();
     bat_stop();

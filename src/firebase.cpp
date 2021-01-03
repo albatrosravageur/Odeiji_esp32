@@ -7,7 +7,6 @@
 #define Firebase_h
 
 void fire_loop(void *pvParameters);
-void fire_get_time();
 
 class Fire_attributes
 {
@@ -20,7 +19,7 @@ Fire_attributes fire; // Stored into the RTC fast memory, so it won't be deleted
 
 TaskHandle_t fire_task = NULL;
 
-void fire_getID(String ID)
+void fire_setID(String ID)
 {
   fire.meeting_ID = ID;
 }
@@ -30,7 +29,41 @@ String fire_getID()
   return fire.meeting_ID;
 }
 
-void fire_base()
+void fire_get_time()
+{
+  if (WiFi.status() == WL_CONNECTED)
+  {
+    HTTPClient http;
+    String serverPath = fire.server_address + "GetTime?dest=" + fire.meeting_ID;
+    http.begin(serverPath.c_str());
+    int status = http.GET();
+    if (status > 0)
+    {
+      String message = http.getString();
+      int time = message.toInt();
+      if ((time < -POINT_MAX_TIME) || (time > POINT_MAX_TIME))
+      {
+        led_demo();
+      }
+      else
+      {
+        led_show_time(time);
+      }
+    }
+    http.end();
+  }
+}
+
+void fire_loop(void *pvParameters)
+{
+  while (1)
+  {
+    fire_get_time();
+    delay(FIRE_PERIOD);
+  }
+}
+
+void fire_end()
 {
   if (fire_task != NULL)
   {
@@ -61,7 +94,7 @@ bool fire_setup()
     if (status == 200)
     {
       Serial.println("status is 200, I connect myself to the server");
-      fire_base();
+      fire_end();
       xTaskCreatePinnedToCore(fire_loop, "Firebase Task", 12000, NULL, FIRE_PRIORITY, &fire_task, FIRE_CORE);
       return true;
     }
@@ -69,40 +102,6 @@ bool fire_setup()
       return 0;
     if (status == 500)
       return 0;
-  }
-}
-
-void fire_loop(void *pvParameters)
-{
-  while (1)
-  {
-    fire_get_time();
-    delay(FIRE_PERIOD);
-  }
-}
-
-void fire_get_time()
-{
-  if (WiFi.status() == WL_CONNECTED)
-  {
-    HTTPClient http;
-    String serverPath = fire.server_address + "GetTime?dest=" + fire.meeting_ID;
-    http.begin(serverPath.c_str());
-    int status = http.GET();
-    if (status > 0)
-    {
-      String message = http.getString();
-      int time = message.toInt();
-      if ((time < -POINT_MAX_TIME) || (time > POINT_MAX_TIME))
-      {
-        led_demo();
-      }
-      else
-      {
-        led_show_time(time);
-      }
-    }
-    http.end();
   }
 }
 

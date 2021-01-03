@@ -91,7 +91,7 @@ void bt_loop(void *pvParameters)
                 SerialBT.println(wifi_get_password());
                 break;
             case SET_MEETING_ID:
-                fire_getID(message.substring(1));
+                fire_setID(message.substring(1));
                 SerialBT.print(char(SET_MEETING_ID));
                 SerialBT.println("Meeting name set to " + message.substring(1));
                 break;
@@ -108,7 +108,7 @@ void bt_loop(void *pvParameters)
                 // Feedback to app is asynchronous
                 break;
             case STOP_CONNECT_MEETING:
-                fire_base();
+                fire_end();
                 SerialBT.println(char(STOP_CONNECT_MEETING));
                 break;
             case GO_CONNECT_WIFI:
@@ -124,7 +124,7 @@ void bt_loop(void *pvParameters)
                 SerialBT.println("Led demo finishes");
                 break;
             case DISCONNECT_FIREBASE:
-                fire_base();
+                fire_end();
                 SerialBT.println(char(DISCONNECT_FIREBASE));
                 break;
             case PLAYPAUSE:
