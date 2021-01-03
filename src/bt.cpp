@@ -61,7 +61,6 @@ void bt_stop()
 
 void bt_loop(void *pvParameters)
 {
-
     while (1)
     {
         String message;
@@ -105,7 +104,6 @@ void bt_loop(void *pvParameters)
                     SerialBT.println(char(FAILURE));
                 else
                     SerialBT.println(char(SUCCESS));
-                // Feedback to app is asynchronous
                 break;
             case STOP_CONNECT_MEETING:
                 fire_end();

@@ -5,32 +5,34 @@
 #include "esp_log.h"
 #include "driver/touch_pad.h"
 #include "soc/rtc_periph.h"
-//#include "soc/sens_periph.h"
 
-#include "touch.h"
-#include "Utilitaires.h"
-#include "firebase.h"
+#include <touch.h>
+#include <Utilitaires.h>
+#include <firebase.h>
 #include <led.h>
 #include <wifi.h>
 #include <bt.h>
 #include <bat.h>
 
-#define TOUCH_THRESH_NO_USE (0)
-#define TOUCH_THRESH_PERCENT (80)
+class Touch{
+    public:
+    bool s_pad_activated;
+    uint16_t threshold;
+};
 
-bool s_pad_activated;
-uint16_t threshold;
+Touch touch;
+
 TaskHandle_t touch_task;
 
-void tp_example_set_thresholds(void)
+void touch_set_thresholds()
 {
     uint16_t touch_value;
     //read filtered value
     touch_pad_read_filtered(TOUCH_NUM, &touch_value);
-    threshold = touch_value * 0.8;
+    touch.threshold = touch_value * TOUCH_THRESH_PERCENT / 100;
     ESP_LOGI(TAG, "test init: touch pad val is " + String(touch_value) + "\n");
     //set interrupt threshold.
-    ESP_ERROR_CHECK(touch_pad_set_thresh(TOUCH_NUM, threshold));
+    ESP_ERROR_CHECK(touch_pad_set_thresh(TOUCH_NUM, touch.threshold));
 }
 
 void callback()
@@ -40,7 +42,7 @@ void callback()
 
 void touch_turn_off_device()
 {
-    touchAttachInterrupt(TOUCH_NUM, callback, threshold * 0.8); //Smaller threshold to wake up to make it sleep tight
+    touchAttachInterrupt(TOUCH_NUM, callback, touch.threshold * TOUCH_THRESH_PERCENT / 100); //Smaller threshold to wake up to make it sleep tight
     Serial.println("Going to sleep now");
     Serial.flush();
     led_clear_display();
@@ -65,10 +67,10 @@ void touch_loop(void *pvParameter)
     {
         //interrupt mode, enable touch interrupt
         touch_pad_intr_enable();
-        if (s_pad_activated || joker)
+        if (touch.s_pad_activated || joker)
         {
             // if one step misses it's ok
-            if (!s_pad_activated)
+            if (!touch.s_pad_activated)
             {
                 joker = 0;
             }
@@ -136,7 +138,7 @@ void touch_loop(void *pvParameter)
             count = 0;
         }
         // Clear information on pad activation
-        s_pad_activated = false;
+        touch.s_pad_activated = false;
         // Wait a while for the pad being released
         delay(TOUCH_PERIOD);
     }
@@ -146,21 +148,15 @@ void touch_loop(void *pvParameter)
   Handle an interrupt triggered when a pad is touched.
   Recognize what pad has been touched and save it in a table.
  */
-void tp_example_rtc_intr(void *arg)
+void touch_rtc_intr(void *arg)
 {
     uint32_t pad_intr = touch_pad_get_status();
     //clear interrupt
     touch_pad_clear_status();
     if ((pad_intr >> TOUCH_NUM) & 0x01)
     {
-        s_pad_activated = true;
+        touch.s_pad_activated = true;
     }
-}
-
-// Before reading touch pad, we need to initialize the RTC IO
-void tp_example_touch_pad_init(void)
-{
-    touch_pad_config(TOUCH_NUM, TOUCH_THRESH_NO_USE);
 }
 
 void touch_setup()
@@ -174,17 +170,16 @@ void touch_setup()
     // If use interrupt trigger mode, should set touch sensor FSM mode at 'TOUCH_FSM_MODE_TIMER'.
     touch_pad_set_fsm_mode(TOUCH_FSM_MODE_TIMER);
     // Set reference voltage for charging/discharging
-    // For most usage scenarios, we recommend using the following combination:
     // the high reference voltage will be 2.7V - 1V = 1.7V, The low reference voltage will be 0.5V.
     touch_pad_set_voltage(TOUCH_HVOLT_2V7, TOUCH_LVOLT_0V5, TOUCH_HVOLT_ATTEN_1V);
     // Init touch pad IO
-    tp_example_touch_pad_init();
+    touch_pad_config(TOUCH_NUM, TOUCH_THRESH_NO_USE);
     // Initialize and start a software filter to detect slight change of capacitance.
     touch_pad_filter_start(TOUCHPAD_FILTER_TOUCH_PERIOD);
     // Set thresh hold
-    tp_example_set_thresholds();
+    touch_set_thresholds();
     // Register touch interrupt ISR
-    touch_pad_isr_register(tp_example_rtc_intr, NULL);
+    touch_pad_isr_register(touch_rtc_intr, NULL);
 
     //Deep sleep mode part
     esp_sleep_enable_touchpad_wakeup();

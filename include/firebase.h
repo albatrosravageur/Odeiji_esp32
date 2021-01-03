@@ -1,4 +1,3 @@
-
 bool fire_setup();
 void fire_setID(String ID);
 String fire_getID();

@@ -3,6 +3,7 @@
 #include <bt.h>
 #include <led.h>
 #include <HTTPClient.h>
+#include <firebase.h>
 
 #define Firebase_h
 

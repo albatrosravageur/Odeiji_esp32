@@ -1,7 +1,7 @@
 #include <Utilitaires.h>
 #include <WiFi.h>
 #include <bt.h>
-#include <wifi.h> // Stored into the RTC fast memory, so it won't be deleted by the deep sleep mode
+#include <wifi.h>
 #include <led.h>
 
 class WiFi_attributes

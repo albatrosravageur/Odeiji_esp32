@@ -1,14 +1,6 @@
 #include <Utilitaires.h>
 #include <bat.h>
 
-#define RESOLUTION 4096
-#define OPERATING_VOLTAGE 3.3
-
-// FULL_CHARGE = RESOLUTION*(4.2V/2)/OPERATING_VOLTAGE
-#define FULL_CHARGE 2606
-// MIN_CHARGE = RESOLUTION*(3.6V/2)/OPERATING_VOLTAGE
-#define MIN_CHARGE 2234
-
 TaskHandle_t bat_task = NULL;
 
 class Bat

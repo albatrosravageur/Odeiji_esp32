@@ -1,13 +1,9 @@
-#include <Utilitaires.h>
-
 #include <TimeLib.h>
-
 #include <FastLED.h>
-
 #include <colorutils.h>
 #include <led.h>
-#include <TimeLib.h>
 #include <firebase.h>
+#include <Utilitaires.h>
 
 #define Led_h
 
