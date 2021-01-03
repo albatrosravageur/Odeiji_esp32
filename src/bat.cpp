@@ -29,13 +29,13 @@ void bat_setup()
     xTaskCreatePinnedToCore(bat_loop, "Battery LED Task", 12000, NULL, BAT_PRIORITY, &bat_task, BAT_CORE);
 }
 
-void set_charge()
+void bat_set_charge()
 {
     pinMode(LED_CHARGED_PIN, INPUT_PULLUP);
     pinMode(LED_CHARGE_PIN, INPUT_PULLDOWN);
 }
 
-void set_charged()
+void bat_set_charged()
 {
     pinMode(LED_CHARGE_PIN, INPUT_PULLUP);
     pinMode(LED_CHARGED_PIN, INPUT_PULLDOWN);
@@ -49,7 +49,7 @@ void bat_turn_off()
 
 int bat_get_level()
 {
-    return bat.level;
+    return min(max(1,bat.level),100); // Respect the [1;100]% interval for the battery level
 }
 
 void bat_stop()
@@ -69,11 +69,11 @@ void bat_loop(void *pvParameters)
         bat.level = round(100 * (analogRead(BAT_LEVEL_READER) - MIN_CHARGE) / (FULL_CHARGE - MIN_CHARGE));
         if (bat.level > 90)
         {
-            set_charged();
+            bat_set_charged();
         }
         else
         {
-            set_charge();
+            bat_set_charge();
         }
         delay(1000);
     }

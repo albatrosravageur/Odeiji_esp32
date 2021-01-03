@@ -40,15 +40,15 @@ void callback()
     //just a placeholder
 }
 
-void turn_off()
+void touch_turn_off_device()
 {
-    touchAttachInterrupt(TOUCH_NUM, callback, threshold*0.8); //Smaller threshold to wake up to make it sleep tight
+    touchAttachInterrupt(TOUCH_NUM, callback, threshold * 0.8); //Smaller threshold to wake up to make it sleep tight
     Serial.println("Going to sleep now");
     Serial.flush();
-    clear_display();
+    led_clear_display();
     Serial.end();
-    stop_firebase();
-    stop_looking_for_wifi();
+    fire_base();
+    wifi_stop_search();
     bt_stop();
     bat_stop();
     led_red_blink();
@@ -117,7 +117,7 @@ void touch_loop(void *pvParameter)
         {
             if (flagOff)
             {
-                turn_off();
+                touch_turn_off_device();
             }
             else if (flagNext)
             {
@@ -130,7 +130,7 @@ void touch_loop(void *pvParameter)
                 led_yellow_blink();
             }
             else if (count)
-                clear_display();
+                led_clear_display();
 
             flagPP = 0;
             flagNext = 0;
@@ -159,16 +159,13 @@ void tp_example_rtc_intr(void *arg)
     }
 }
 
-/*
- * Before reading touch pad, we need to initialize the RTC IO.
- */
+// Before reading touch pad, we need to initialize the RTC IO
 void tp_example_touch_pad_init(void)
 {
-    //init RTC IO and mode for touch pad.
     touch_pad_config(TOUCH_NUM, TOUCH_THRESH_NO_USE);
 }
 
-void touch_setup(void)
+void touch_setup()
 {
     // Setup pin
     pinMode(TOUCH_PIN, INPUT);

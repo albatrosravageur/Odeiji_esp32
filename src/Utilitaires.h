@@ -34,25 +34,23 @@
 
 // FREE-RTOS
 // Core repartition of threads
-#define BAT_CORE 1
+#define BAT_CORE 0
 #define TOUCH_CORE 0
 #define BT_CORE 0
 #define FIRE_CORE 0
 #define WIFI_CORE 0
-#define LED_WIFI_CORE 1
 
 // Priorities among threads (1 is min, 5 is max)
-#define BAT_PRIORITY 2
+#define BAT_PRIORITY 1
 #define TOUCH_PRIORITY 3
 #define BT_PRIORITY 2
 #define FIRE_PRIORITY 2
 #define WIFI_PRIORITY 2
-#define LED_WIFI_PRIORITY 1
 
 // Bluetooth
-#define DEVICE_NAME "Odeji-123456"
+#define DEVICE_NAME "Odeji-123456" // This is a unique ID
 
-enum bt_messages_type
+enum bt_messages_received
 {
     SET_WIFI_SSID = '0',
     GET_WIFI_SSID = '1',
@@ -61,17 +59,25 @@ enum bt_messages_type
     SET_MEETING_ID = '4',
     GET_MEETING_ID = '5',
     GO_CONNECT_FIREBASE = '6',
-    UNABLE_TO_CONNECT_FIREBASE = '60',
     DISCONNECT_FIREBASE = '7',
     GO_CONNECT_WIFI = '8',
-    WIFI_FAILURE = '80',
-    WIFI_CONNECTED = '81',
     STOP_LOOKING_FOR_WIFI = '9',
-    STOP_FIREBASE = 'B',
     DO_DEMO_LEDS = 'A',
+    STOP_FIREBASE = 'B',
     PLAYPAUSE = 'C',
     NEXT = 'D',
     TURN_OFF = 'E',
     ALL_PARAMETERS = 'F',
-    STOP_CONNECT_MEETING = 'G'
+    STOP_CONNECT_MEETING = 'G',
+    GET_BATTERY_LEVEL = 'H'
+};
+enum bt_messages_state
+{
+    FAILURE = '0',
+    SUCCESS = '1'
+};
+enum bt_messages_sent
+{
+    WIFI_FAILURE = '0',
+    WIFI_CONNECTED = '1'
 };

@@ -123,7 +123,7 @@ void led_red_blink()
     {
         linear_display(NUM_LEDS, CRGB::Red);
         delay(LED_BLINK_DELAY);
-        clear_display();
+        led_clear_display();
         if (i < 2)
             delay(LED_BLINK_DELAY);
     }
@@ -138,7 +138,7 @@ void led_blue_blink()
     {
         linear_display(NUM_LEDS, CRGB::Blue);
         delay(LED_BLINK_DELAY);
-        clear_display();
+        led_clear_display();
         if (i < 2)
             delay(LED_BLINK_DELAY);
     }
@@ -153,7 +153,7 @@ void led_green_blink()
     {
         linear_display(NUM_LEDS, CRGB::Green);
         delay(LED_BLINK_DELAY);
-        clear_display();
+        led_clear_display();
         if (i < 2)
             delay(LED_BLINK_DELAY);
     }
@@ -168,7 +168,7 @@ void led_yellow_blink()
     {
         linear_display(NUM_LEDS, CRGB::Yellow);
         delay(LED_BLINK_DELAY);
-        clear_display();
+        led_clear_display();
         if (i < 2)
             delay(LED_BLINK_DELAY);
     }
@@ -183,14 +183,14 @@ void led_purple_blink()
     {
         linear_display(NUM_LEDS, CRGB::Purple);
         delay(LED_BLINK_DELAY);
-        clear_display();
+        led_clear_display();
         if (i < 2)
             delay(LED_BLINK_DELAY);
     }
     led.flag = true;
 }
 
-void clear_display()
+void led_clear_display()
 {
     linear_display(NUM_LEDS, CRGB::Black);
 }

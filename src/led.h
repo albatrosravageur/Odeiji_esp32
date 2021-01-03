@@ -6,7 +6,7 @@ void led_yellow_loading(int time);
 void led_purple_loading(int time);
 void led_red_loading(int time);
 void led_green_loading(int time);
-void clear_display();
+void led_clear_display();
 void led_red_blink();
 void led_blue_blink();
 void led_green_blink();

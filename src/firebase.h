@@ -1,9 +1,9 @@
 
 bool fire_setup();
-void set_meeting_ID(String ID);
-String get_meeting_ID();
+void fire_getID(String ID);
+String fire_getID();
 void fire_go_next();
 void fire_play_pause();
 void fire_get_time();
-void stop_firebase();
-String get_firebase_state();
+void fire_base();
+String fire_get_state();

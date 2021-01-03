@@ -15,27 +15,27 @@ WiFi_attributes wifi;
 
 TaskHandle_t wifi_task = NULL;
 
-void set_wifi_ssid(String ssid)
+void wifi_set_ssid(String ssid)
 {
   wifi.ssid = ssid;
 }
 
-String get_wifi_ssid()
+String wifi_get_ssid()
 {
   return wifi.ssid;
 }
 
-void RTC_IRAM_ATTR set_wifi_password(String password)
+void RTC_IRAM_ATTR wifi_set_password(String password)
 {
   wifi.password = password;
 }
 
-String get_wifi_password()
+String wifi_get_password()
 {
   return wifi.password;
 }
 
-void stop_looking_for_wifi()
+void wifi_stop_search()
 {
   if (wifi_task != NULL)
   {
@@ -50,7 +50,7 @@ void stop_looking_for_wifi()
   }
 }
 
-String get_wifi_state()
+String wifi_get_state()
 {
   if (wifi_task == NULL)
   {
@@ -69,7 +69,7 @@ String get_wifi_state()
   }
 }
 
-void wifi_research_loop(void *pvParameters)
+void wifi_search_loop(void *pvParameters)
 {
   Serial.println("in the loop");
   char ssid[wifi.ssid.length() + 1];
@@ -104,10 +104,10 @@ void wifi_research_loop(void *pvParameters)
     bt_send(WIFI_CONNECTED);
     led_purple_blink();
   }
-  stop_looking_for_wifi();
+  wifi_stop_search();
 }
-void connect2wifi()
+void wifi_connect()
 {
-  stop_looking_for_wifi();
-  xTaskCreatePinnedToCore(wifi_research_loop, "Wifi Task", 10000, NULL, WIFI_PRIORITY, &wifi_task, WIFI_CORE);
+  wifi_stop_search();
+  xTaskCreatePinnedToCore(wifi_search_loop, "Wifi Task", 10000, NULL, WIFI_PRIORITY, &wifi_task, WIFI_CORE);
 }

@@ -11,23 +11,20 @@ void setup()
   // Begin serial
   Serial.begin(115200);
 
-  // Setup time
-  setTime(0);
-
   // Setup leds control
   led_setup();
 
   // Setup touch button
   touch_setup();
 
-  // Say hello to daddy
-  led_demo();
+  // Setup battery leds display
+  bat_setup();
 
   //  Setup bluetooth
   bt_setup();
 
-  // Setup battery leds display
-  bat_setup();
+  // Say hello to daddy (display leds with a cool pattern)
+  led_demo();
 }
 
 void loop()

@@ -36,17 +36,17 @@ Fire_attributes fire; // Stored into the RTC fast memory, so it won't be deleted
 
 TaskHandle_t fire_task = NULL;
 
-void set_meeting_ID(String ID)
+void fire_getID(String ID)
 {
   fire.meeting_ID = ID;
 }
 
-String get_meeting_ID()
+String fire_getID()
 {
   return fire.meeting_ID;
 }
 
-void stop_firebase()
+void fire_base()
 {
   if (fire_task != NULL)
   {
@@ -77,7 +77,7 @@ bool fire_setup()
     if (status == 200)
     {
       Serial.println("status is 200, I connect myself to the server");
-      stop_firebase();
+      fire_base();
       xTaskCreatePinnedToCore(fire_loop, "Firebase Task", 12000, NULL, FIRE_PRIORITY, &fire_task, FIRE_CORE);
       return true;
     }
@@ -146,7 +146,7 @@ void fire_go_next()
   }
 }
 
-String get_firebase_state()
+String fire_get_state()
 {
   if (fire_task == NULL)
   {
