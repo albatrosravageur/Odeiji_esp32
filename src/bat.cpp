@@ -1,5 +1,5 @@
-#include <bat.h>
 #include <Utilitaires.h>
+#include <bat.h>
 
 #define RESOLUTION 4096
 #define OPERATING_VOLTAGE 3.3
@@ -75,6 +75,6 @@ void bat_loop(void *pvParameters)
         {
             bat_set_charge();
         }
-        delay(1000);
+        delay(BAT_PERIOD);
     }
 }

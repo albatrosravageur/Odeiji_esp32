@@ -159,6 +159,6 @@ void bt_loop(void *pvParameters)
                 break;
             }
         }
-        delay(50);
+        delay(BT_PERIOD);
     }
 }

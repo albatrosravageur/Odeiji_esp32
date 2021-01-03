@@ -1,17 +1,15 @@
-
 #include <stdio.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/queue.h"
 #include "esp_log.h"
-
 #include "driver/touch_pad.h"
 #include "soc/rtc_periph.h"
 //#include "soc/sens_periph.h"
+
 #include "touch.h"
 #include "Utilitaires.h"
 #include "firebase.h"
-#include "Arduino.h"
 #include <led.h>
 #include <wifi.h>
 #include <bt.h>
@@ -80,35 +78,35 @@ void touch_loop(void *pvParameter)
             }
             count++;
             // Set flag corresponding to how long the count has been made
-            if (count >= TIME_OFF_MS / TOUCH_REFRESH_PERIOD)
+            if (count >= TIME_OFF_MS / TOUCH_PERIOD)
             {
                 if (!flagOff)
                     Serial.println("FlagOff is set on");
                 flagOff = 1;
             }
 
-            else if (count >= TIME_NEXT_MS / TOUCH_REFRESH_PERIOD)
+            else if (count >= TIME_NEXT_MS / TOUCH_PERIOD)
             {
                 if (!flagNext)
                 {
                     Serial.println("FlagNext is set on");
                     flagNext = 1;
                 }
-                led_red_loading(int((count * TOUCH_REFRESH_PERIOD - TIME_NEXT_MS) * (NUM_LEDS + 4) / 1000));
+                led_red_loading(int((count * TOUCH_PERIOD - TIME_NEXT_MS) * (NUM_LEDS + 4) / 1000));
             }
 
-            else if (count >= TIME_PP_MS / TOUCH_REFRESH_PERIOD)
+            else if (count >= TIME_PP_MS / TOUCH_PERIOD)
             {
                 if (!flagPP)
                 {
                     Serial.println("FlagPlayPause is set on");
                     flagPP = 1;
                 }
-                led_green_loading(int((count * TOUCH_REFRESH_PERIOD - TIME_PP_MS) * (NUM_LEDS + 1) / 1000));
+                led_green_loading(int((count * TOUCH_PERIOD - TIME_PP_MS) * (NUM_LEDS + 1) / 1000));
             }
             else
             {
-                led_yellow_loading(int((count * TOUCH_REFRESH_PERIOD * (NUM_LEDS + 1)) / 1000));
+                led_yellow_loading(int((count * TOUCH_PERIOD * (NUM_LEDS + 1)) / 1000));
             }
 
             ESP_LOGI(TAG, "T7 activated! \n");
@@ -140,7 +138,7 @@ void touch_loop(void *pvParameter)
         // Clear information on pad activation
         s_pad_activated = false;
         // Wait a while for the pad being released
-        delay(TOUCH_REFRESH_PERIOD);
+        delay(TOUCH_PERIOD);
     }
 }
 

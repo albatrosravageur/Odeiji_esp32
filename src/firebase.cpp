@@ -1,23 +1,7 @@
-
-#ifndef Arduino
-#include <Arduino.h>
-#define Arduino
-#endif
-
-#ifndef Utilitaires_h
 #include <Utilitaires.h>
-#define Utilitaires_h
-#endif
-
-#ifndef Wifi_h
-#include <WiFi.h>
-#define Wifi_h
-#endif
-
+#include <WiFi.h
 #include <bt.h>
-
 #include <led.h>
-
 #include <HTTPClient.h>
 
 #define Firebase_h
@@ -29,7 +13,7 @@ class Fire_attributes
 {
 public:
   String meeting_ID = "    ";
-  String server_address = "http://us-central1-odeji-6a294.cloudfunctions.net/"; // the project name address from firebase id
+  String server_address = FIREBASE_ADDRESS; // the project name address from firebase id
 };
 
 Fire_attributes fire; // Stored into the RTC fast memory, so it won't be deleted by the deep sleep mode
@@ -93,7 +77,7 @@ void fire_loop(void *pvParameters)
   while (1)
   {
     fire_get_time();
-    delay(500);
+    delay(FIRE_PERIOD);
   }
 }
 

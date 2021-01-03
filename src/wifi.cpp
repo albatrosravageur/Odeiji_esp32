@@ -25,7 +25,7 @@ String wifi_get_ssid()
   return wifi.ssid;
 }
 
-void RTC_IRAM_ATTR wifi_set_password(String password)
+void wifi_set_password(String password)
 {
   wifi.password = password;
 }
@@ -60,7 +60,7 @@ String wifi_get_state()
   {
     if (WiFi.status() != WL_CONNECTED)
     {
-    return "Looking for Wifi";
+      return "Looking for Wifi";
     }
     else
     {
@@ -92,7 +92,7 @@ void wifi_search_loop(void *pvParameters)
       go_up = false;
     if (i == 0)
       go_up = true;
-    delay(100);
+    delay(WIFI_PERIOD);
   }
   if (WiFi.status() != WL_CONNECTED)
   {
@@ -106,6 +106,7 @@ void wifi_search_loop(void *pvParameters)
   }
   wifi_stop_search();
 }
+
 void wifi_connect()
 {
   wifi_stop_search();

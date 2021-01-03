@@ -11,16 +11,6 @@
 
 #define Led_h
 
-CRGBPalette16 currentPalette;
-TBlendType currentBlending;
-void linear_display(int nb_leds, uint32_t color);
-void SetupBlackAndWhiteStripedPalette();
-void SetupPurpleAndGreenPalette();
-void SetupBlackAndWhiteStripedPalette();
-void SetupTotallyRandomPalette();
-
-extern CRGBPalette16 myRedWhiteBluePalette;
-
 class Led
 {
 public:
@@ -35,9 +25,22 @@ CRGB leds[NUM_LEDS];
 
 void led_setup()
 {
-    pinMode(LED_DATA_PIN, OUTPUT);
-    pinMode(LED_CLOCK_PIN, OUTPUT);
+    pinMode(LED_DATA_PIN, SPID4_OUT_IDX);
+    pinMode(LED_CLOCK_PIN, SPICLK_OUT_IDX);
     FastLED.addLeds<APA102, LED_DATA_PIN, LED_CLOCK_PIN, BGR>(leds, NUM_LEDS);
+}
+
+// The original function that will be declined everywhere
+void linear_display(int nb_leds, uint32_t color)
+{
+    for (int i = 0; i < NUM_LEDS + 1; i++)
+    {
+        if (i >= (NUM_LEDS - nb_leds))
+            leds[i] = color;
+        else
+            leds[i] = CRGB::Black;
+    }
+    FastLED.show();
 }
 
 void led_demo()
@@ -115,13 +118,13 @@ void led_purple_loading(int time)
     linear_display(time, CRGB::Purple);
 }
 
-void led_red_blink()
+void led_blue_blink()
 {
     led.flag = false;
 
     for (int i = 0; i < 3; i++)
     {
-        linear_display(NUM_LEDS, CRGB::Red);
+        linear_display(NUM_LEDS, CRGB::Blue);
         delay(LED_BLINK_DELAY);
         led_clear_display();
         if (i < 2)
@@ -130,13 +133,13 @@ void led_red_blink()
     led.flag = true;
 }
 
-void led_blue_blink()
+void led_red_blink()
 {
     led.flag = false;
 
     for (int i = 0; i < 3; i++)
     {
-        linear_display(NUM_LEDS, CRGB::Blue);
+        linear_display(NUM_LEDS, CRGB::Red);
         delay(LED_BLINK_DELAY);
         led_clear_display();
         if (i < 2)
@@ -195,14 +198,3 @@ void led_clear_display()
     linear_display(NUM_LEDS, CRGB::Black);
 }
 
-void linear_display(int nb_leds, uint32_t color)
-{
-    for (int i = 0; i < NUM_LEDS + 1; i++)
-    {
-        if (i >= (NUM_LEDS - nb_leds))
-            leds[i] = color;
-        else
-            leds[i] = CRGB::Black;
-    }
-    FastLED.show();
-}
