@@ -28,9 +28,9 @@
 // Wifi
 #define MAX_WIFI_RESEARCH_TIME 60 //s
 
-// Leds for battery
-#define LED_CHARGED_PIN 15
-#define LED_CHARGE_PIN 32
+// Battery
+#define LED_CHARGED_PIN A1
+#define LED_CHARGE_PIN A0
 #define BAT_LEVEL_READER A12
 #define RESOLUTION 4096
 #define OPERATING_VOLTAGE 3.3
@@ -44,7 +44,7 @@
 
 enum bt_messages_protocol
 {
-    SET_WIFI_SSID = '0',
+    SET_WIFI_SSID = 'G',
     GET_WIFI_SSID = '1',
     SET_WIFI_PASSWORD = '2',
     GET_WIFI_PASSWORD = '3',
@@ -60,7 +60,6 @@ enum bt_messages_protocol
     NEXT = 'D',
     TURN_OFF = 'E',
     ALL_PARAMETERS = 'F',
-    STOP_CONNECT_MEETING = 'G',
     GET_BATTERY_LEVEL = 'H'
 };
 enum bt_messages_state
@@ -70,8 +69,8 @@ enum bt_messages_state
 };
 enum bt_messages_sent
 {
-    WIFI_FAILURE = '80',
-    WIFI_CONNECTED = '81'
+    WIFI_FAILURE,
+    WIFI_CONNECTED
 };
 
 // FREE-RTOS

@@ -7,8 +7,8 @@
 class WiFi_attributes
 {
 public:
-  String ssid = "Livebox-F2CB";   // input your home or public wifi name
-  String password = "bonjour123"; //password of wifi ssid
+  String ssid = "demo-odeji-wifi";   // input your home or public wifi name
+  String password = "yvesalex"; //password of wifi ssid
 };
 
 WiFi_attributes wifi;

@@ -47,10 +47,11 @@ void bt_send(int usecase)
         SerialBT.println(char(FAILURE));
         break;
     case WIFI_CONNECTED:
+        Serial.print(char(GO_CONNECT_WIFI));
+        Serial.println(char(SUCCESS));
         SerialBT.print(char(GO_CONNECT_WIFI));
         SerialBT.println(char(SUCCESS));
         break;
-
     }
 }
 
@@ -105,16 +106,13 @@ void bt_loop(void *pvParameters)
                 else
                     SerialBT.println(char(SUCCESS));
                 break;
-            case STOP_CONNECT_MEETING:
-                fire_end();
-                SerialBT.println(char(STOP_CONNECT_MEETING));
-                break;
             case GO_CONNECT_WIFI:
                 wifi_connect();
                 break;
             case STOP_LOOKING_FOR_WIFI:
                 wifi_stop_search();
                 led_clear_display();
+                SerialBT.println(STOP_LOOKING_FOR_WIFI);
                 break;
             case DO_DEMO_LEDS:
                 SerialBT.println("Led demo starts");
